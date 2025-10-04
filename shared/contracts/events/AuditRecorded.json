@@ -1,0 +1,24 @@
+{
+  "$id": "com.platform.events.AuditRecorded",
+  "type": "object",
+  "properties": {
+    "auditId": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "auditId",
+    "actor",
+    "action",
+    "timestamp"
+  ]
+}

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-react
+spec:
+  type: ClusterIP
+  selector:
+    app: ui-react
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,14 @@
+{
+  "name": "@rush-temp/realtime-service",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@configs/eslint": "workspace:*",
+    "eslint": "^8.57.0",
+    "express": "^4.19.2",
+    "jest": "^29.7.0",
+    "kafkajs": "^2.2.4",
+    "nodemon": "^3.1.4",
+    "prom-client": "^15.1.3"
+  }
+}

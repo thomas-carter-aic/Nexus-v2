@@ -1,0 +1,3 @@
+name: {{SERVICE_NAME}}
+language: java
+owner: platform-team@example.com

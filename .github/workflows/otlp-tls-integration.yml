@@ -1,0 +1,64 @@
+name: OTLP mTLS Integration Test (Strict mTLS)
+on: [push, pull_request]
+jobs:
+  otlp-mtls-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssl docker.io
+          python -m pip install --upgrade pip
+          pip install grpcio opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc
+      - name: Generate CA, server and client certs
+        run: |
+          mkdir -p ci-certs
+          # CA
+          openssl genrsa -out ci-certs/ca.key 2048
+          openssl req -x509 -new -nodes -key ci-certs/ca.key -subj "/CN=ci-otel-ca" -days 3650 -out ci-certs/ca.crt
+          # server
+          openssl genrsa -out ci-certs/server.key 2048
+          openssl req -new -key ci-certs/server.key -subj "/CN=otel-collector" -out ci-certs/server.csr
+          cat > ci-certs/extfile.cnf <<EOL
+[ req_ext ]
+subjectAltName = DNS:otel-collector,IP:127.0.0.1
+EOL
+          openssl x509 -req -in ci-certs/server.csr -CA ci-certs/ca.crt -CAkey ci-certs/ca.key -CAcreateserial -out ci-certs/server.crt -days 365 -extfile ci-certs/extfile.cnf -extensions req_ext
+          # client cert (for mTLS)
+          openssl genrsa -out ci-certs/client.key 2048
+          openssl req -new -key ci-certs/client.key -subj "/CN=ci-client" -out ci-certs/client.csr
+          openssl x509 -req -in ci-certs/client.csr -CA ci-certs/ca.crt -CAkey ci-certs/ca.key -CAcreateserial -out ci-certs/client.crt -days 365
+      - name: Create collector config with mTLS receiver
+        run: |
+          mkdir -p ci-config
+          cat > ci-config/otel-config.yaml <<'YAML'
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        tls_settings:
+          cert_file: /conf/tls/server.crt
+          key_file: /conf/tls/server.key
+          client_ca_file: /conf/tls/ca.crt
+processors:
+  batch:
+exporters:
+  logging:
+    loglevel: info
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [logging]
+YAML
+      - name: Run OTel Collector container with mounted certs and config
+        run: |
+          docker run -d --name otelcol -p 4317:4317 -v $PWD/ci-config/otel-config.yaml:/etc/otel-config.yaml:ro -v $PWD/ci-certs:/conf/tls:ro otel/opentelemetry-collector-contrib:0.79.0 --config=/etc/otel-config.yaml
+          sleep 3
+      - name: Run strict mTLS Python test
+        env:
+          OTEL_ENDPOINT: "localhost:4317"
+        run: |
+          python tests/ci/otlp_tls_test_mtls.py

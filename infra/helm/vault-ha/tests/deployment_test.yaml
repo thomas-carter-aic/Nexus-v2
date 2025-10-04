@@ -1,0 +1,13 @@
+suite: Test vault statefulset rendering
+templates:
+  - templates/statefulset.yaml
+tests:
+  - it: should set volumeClaimTemplates when persistence enabled
+    set:
+      persistence.enabled: true
+    asserts:
+      - hasDocuments:
+          count: 1
+      - contains:
+          path: metadata.name
+          value: vault

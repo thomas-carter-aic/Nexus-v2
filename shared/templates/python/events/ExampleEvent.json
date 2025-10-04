@@ -1,0 +1,12 @@
+{
+  "$id": "com.platform.events.ExampleEvent",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

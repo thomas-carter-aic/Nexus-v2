@@ -1,0 +1,723 @@
+openapi: 3.0.3
+info:
+  title: AIC AI Platform Authentication Service API
+  description: |
+    Authentication and authorization service for the AIC AI Platform (AIC-AIPaaS).
+    
+    This service provides:
+    - User registration and authentication
+    - JWT token management
+    - Role-based access control
+    - Session management
+    
+    ## Authentication
+    
+    Most endpoints require authentication using JWT tokens. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <jwt-token>
+    ```
+    
+    ## Rate Limiting
+    
+    API calls are rate limited to prevent abuse:
+    - Authentication endpoints: 10 requests per minute per IP
+    - Other endpoints: 100 requests per minute per user
+    
+  version: 1.0.0
+  contact:
+    name: AIC AI Platform Team
+    email: platform@appliedinnovationcorp.com
+    url: https://github.com/thomas-carter-aic/aic-aipaas
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://auth.aic-aipaas.local
+    description: Production server
+  - url: https://auth-staging.aic-aipaas.local
+    description: Staging server
+  - url: http://localhost:8000
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: User authentication and token management
+  - name: User Management
+    description: User registration and profile management
+  - name: Health
+    description: Service health and status endpoints
+
+paths:
+  /:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Check if the authentication service is healthy and running
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "AIC AI Platform Authentication Service"
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T10:30:00Z"
+                  version:
+                    type: string
+                    example: "1.0.0"
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user credentials and return JWT access token
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            examples:
+              standard_login:
+                summary: Standard user login
+                value:
+                  username: "john_doe"
+                  password: "secure_password123"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              examples:
+                successful_login:
+                  summary: Successful login response
+                  value:
+                    access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    token_type: "bearer"
+                    expires_in: 3600
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_credentials:
+                  summary: Invalid username or password
+                  value:
+                    error: "unauthorized"
+                    message: "Incorrect username or password"
+                    timestamp: "2025-01-15T10:30:00Z"
+        '429':
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                rate_limited:
+                  summary: Rate limit exceeded
+                  value:
+                    error: "rate_limit_exceeded"
+                    message: "Too many login attempts. Please try again later."
+                    retry_after: 300
+
+  /auth/register:
+    post:
+      tags:
+        - User Management
+      summary: User registration
+      description: Register a new user account
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            examples:
+              new_user:
+                summary: New user registration
+                value:
+                  username: "jane_smith"
+                  email: "jane.smith@example.com"
+                  password: "secure_password123"
+                  first_name: "Jane"
+                  last_name: "Smith"
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                registered_user:
+                  summary: Successfully registered user
+                  value:
+                    id: "usr_123456789"
+                    username: "jane_smith"
+                    email: "jane.smith@example.com"
+                    first_name: "Jane"
+                    last_name: "Smith"
+                    is_active: true
+                    created_at: "2025-01-15T10:30:00Z"
+                    updated_at: "2025-01-15T10:30:00Z"
+        '400':
+          description: Invalid registration data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+              examples:
+                validation_error:
+                  summary: Validation errors
+                  value:
+                    error: "validation_error"
+                    message: "Invalid input data"
+                    details:
+                      - field: "email"
+                        message: "Invalid email format"
+                      - field: "password"
+                        message: "Password must be at least 8 characters"
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_exists:
+                  summary: Username already taken
+                  value:
+                    error: "conflict"
+                    message: "Username already registered"
+
+  /auth/me:
+    get:
+      tags:
+        - User Management
+      summary: Get current user
+      description: Get information about the currently authenticated user
+      operationId: getCurrentUser
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Current user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                current_user:
+                  summary: Current user details
+                  value:
+                    id: "usr_123456789"
+                    username: "john_doe"
+                    email: "john.doe@example.com"
+                    first_name: "John"
+                    last_name: "Doe"
+                    is_active: true
+                    roles: ["user"]
+                    created_at: "2025-01-10T08:00:00Z"
+                    updated_at: "2025-01-15T10:30:00Z"
+                    last_login: "2025-01-15T10:25:00Z"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/validate:
+    post:
+      tags:
+        - Authentication
+      summary: Validate JWT token
+      description: Validate the provided JWT token and return user information
+      operationId: validateToken
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Token is valid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    example: true
+                  user:
+                    type: string
+                    example: "john_doe"
+                  expires_at:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T11:30:00Z"
+                  roles:
+                    type: array
+                    items:
+                      type: string
+                    example: ["user"]
+        '401':
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Token expired"
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh JWT token
+      description: Refresh an existing JWT token to extend its validity
+      operationId: refreshToken
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Invalidate the current JWT token and log out the user
+      operationId: logoutUser
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Logout successful"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T10:30:00Z"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/change-password:
+    post:
+      tags:
+        - User Management
+      summary: Change password
+      description: Change the password for the currently authenticated user
+      operationId: changePassword
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - current_password
+                - new_password
+              properties:
+                current_password:
+                  type: string
+                  format: password
+                  description: Current password
+                new_password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: New password (minimum 8 characters)
+            examples:
+              password_change:
+                summary: Password change request
+                value:
+                  current_password: "old_password123"
+                  new_password: "new_secure_password456"
+      responses:
+        '200':
+          description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password changed successfully"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T10:30:00Z"
+        '400':
+          description: Invalid password data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /auth/forgot-password:
+    post:
+      tags:
+        - Authentication
+      summary: Forgot password
+      description: Request a password reset for the specified email address
+      operationId: forgotPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email address for password reset
+            examples:
+              forgot_password:
+                summary: Password reset request
+                value:
+                  email: "user@example.com"
+      responses:
+        '200':
+          description: Password reset email sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password reset email sent"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T10:30:00Z"
+        '404':
+          description: Email not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/reset-password:
+    post:
+      tags:
+        - Authentication
+      summary: Reset password
+      description: Reset password using a reset token received via email
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - new_password
+              properties:
+                token:
+                  type: string
+                  description: Password reset token from email
+                new_password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  description: New password (minimum 8 characters)
+            examples:
+              reset_password:
+                summary: Password reset with token
+                value:
+                  token: "reset_token_123456789"
+                  new_password: "new_secure_password789"
+      responses:
+        '200':
+          description: Password reset successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password reset successfully"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-15T10:30:00Z"
+        '400':
+          description: Invalid or expired reset token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from the login endpoint
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          description: Username or email address
+          example: "john_doe"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: User password
+          example: "secure_password123"
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 50
+          pattern: '^[a-zA-Z0-9_]+$'
+          description: Unique username (alphanumeric and underscore only)
+          example: "jane_smith"
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Valid email address
+          example: "jane.smith@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: Password (minimum 8 characters)
+          example: "secure_password123"
+        first_name:
+          type: string
+          maxLength: 50
+          description: User's first name
+          example: "Jane"
+        last_name:
+          type: string
+          maxLength: 50
+          description: User's last name
+          example: "Smith"
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        token_type:
+          type: string
+          description: Token type (always 'bearer')
+          example: "bearer"
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 3600
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique user identifier
+          example: "usr_123456789"
+        username:
+          type: string
+          description: Username
+          example: "john_doe"
+        email:
+          type: string
+          format: email
+          description: Email address
+          example: "john.doe@example.com"
+        first_name:
+          type: string
+          description: First name
+          example: "John"
+        last_name:
+          type: string
+          description: Last name
+          example: "Doe"
+        is_active:
+          type: boolean
+          description: Whether the user account is active
+          example: true
+        roles:
+          type: array
+          items:
+            type: string
+          description: User roles
+          example: ["user", "developer"]
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+          example: "2025-01-10T08:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2025-01-15T10:30:00Z"
+        last_login:
+          type: string
+          format: date-time
+          description: Last login timestamp
+          example: "2025-01-15T10:25:00Z"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "unauthorized"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid credentials"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2025-01-15T10:30:00Z"
+        request_id:
+          type: string
+          description: Unique request identifier for debugging
+          example: "req_123456789"
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error code
+          example: "validation_error"
+        message:
+          type: string
+          description: General error message
+          example: "Invalid input data"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field name with validation error
+                example: "email"
+              message:
+                type: string
+                description: Specific validation error message
+                example: "Invalid email format"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2025-01-15T10:30:00Z"
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required or token invalid
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            missing_token:
+              summary: Missing authentication token
+              value:
+                error: "unauthorized"
+                message: "Authentication required"
+                timestamp: "2025-01-15T10:30:00Z"
+            invalid_token:
+              summary: Invalid or expired token
+              value:
+                error: "unauthorized"
+                message: "Invalid or expired token"
+                timestamp: "2025-01-15T10:30:00Z"
+
+  examples:
+    StandardUser:
+      summary: Standard user account
+      value:
+        id: "usr_123456789"
+        username: "john_doe"
+        email: "john.doe@example.com"
+        first_name: "John"
+        last_name: "Doe"
+        is_active: true
+        roles: ["user"]
+        created_at: "2025-01-10T08:00:00Z"
+        updated_at: "2025-01-15T10:30:00Z"
+
+    AdminUser:
+      summary: Admin user account
+      value:
+        id: "usr_987654321"
+        username: "admin_user"
+        email: "admin@aic-aipaas.com"
+        first_name: "Admin"
+        last_name: "User"
+        is_active: true
+        roles: ["user", "admin"]
+        created_at: "2025-01-01T00:00:00Z"
+        updated_at: "2025-01-15T10:30:00Z"

@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.ResourceAllocated",
+  "type": "object",
+  "properties": {
+    "resourceId": {
+      "type": "string"
+    },
+    "resourceType": {
+      "type": "string"
+    },
+    "allocatedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "resourceId",
+    "resourceType",
+    "allocatedAt"
+  ]
+}

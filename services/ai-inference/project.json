@@ -1,0 +1,11 @@
+{
+  "name": "ai-inference",
+  "sourceRoot": "services/ai-inference/src",
+  "targets": {
+    "build": { "executor": "nx:run-commands", "options": { "command": "poetry build", "cwd": "services/ai-inference" }, "outputs": ["{projectRoot}/dist"] },
+    "serve": { "executor": "nx:run-commands", "options": { "command": "poetry run uvicorn src.main:app --reload" } },
+    "test": { "executor": "nx:run-commands", "options": { "command": "poetry run pytest tests/" } },
+    "lint": { "executor": "nx:run-commands", "options": { "command": "poetry run black . && poetry run flake8" } },
+    "deploy": { "executor": "nx:run-commands", "options": { "command": "gcloud run deploy" } }  // For cloud-native
+  }
+}

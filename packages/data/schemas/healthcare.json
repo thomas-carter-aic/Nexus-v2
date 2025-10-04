@@ -1,0 +1,608 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Healthcare Data Schema",
+  "description": "Schema definition for healthcare data in AIC-AIPaaS platform",
+  "type": "object",
+  "properties": {
+    "patient": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Patient unique identifier",
+          "pattern": "^PAT-[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$"
+        },
+        "demographics": {
+          "type": "object",
+          "properties": {
+            "age": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 150,
+              "description": "Patient age in years"
+            },
+            "gender": {
+              "type": "string",
+              "enum": ["male", "female", "other", "unknown"],
+              "description": "Patient gender"
+            },
+            "ethnicity": {
+              "type": "string",
+              "enum": [
+                "hispanic_latino",
+                "not_hispanic_latino",
+                "unknown",
+                "declined"
+              ],
+              "description": "Patient ethnicity"
+            },
+            "race": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "american_indian_alaska_native",
+                  "asian",
+                  "black_african_american",
+                  "native_hawaiian_pacific_islander",
+                  "white",
+                  "other",
+                  "unknown"
+                ]
+              },
+              "description": "Patient race (can be multiple)"
+            }
+          },
+          "required": ["age", "gender"]
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "preferred_language": {
+              "type": "string",
+              "description": "ISO 639-1 language code"
+            },
+            "emergency_contact": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "relationship": {
+                  "type": "string",
+                  "enum": ["spouse", "parent", "child", "sibling", "friend", "other"]
+                },
+                "phone": {
+                  "type": "string",
+                  "pattern": "^\\+?[1-9]\\d{1,14}$"
+                }
+              },
+              "required": ["name", "relationship"]
+            }
+          }
+        }
+      },
+      "required": ["id", "demographics"]
+    },
+    "medical_record": {
+      "type": "object",
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "description": "Medical record identifier"
+        },
+        "encounter": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Encounter identifier"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Encounter date and time"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "inpatient",
+                "outpatient",
+                "emergency",
+                "urgent_care",
+                "telehealth",
+                "home_visit"
+              ],
+              "description": "Type of medical encounter"
+            },
+            "provider": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Healthcare provider identifier"
+                },
+                "name": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "specialty": {
+                  "type": "string",
+                  "enum": [
+                    "family_medicine",
+                    "internal_medicine",
+                    "pediatrics",
+                    "cardiology",
+                    "dermatology",
+                    "endocrinology",
+                    "gastroenterology",
+                    "neurology",
+                    "oncology",
+                    "orthopedics",
+                    "psychiatry",
+                    "radiology",
+                    "surgery",
+                    "other"
+                  ]
+                },
+                "facility": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxLength": 100
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["hospital", "clinic", "urgent_care", "specialty_center"]
+                    },
+                    "location": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string",
+                          "maxLength": 50
+                        },
+                        "state": {
+                          "type": "string",
+                          "maxLength": 50
+                        },
+                        "country": {
+                          "type": "string",
+                          "pattern": "^[A-Z]{2}$"
+                        }
+                      }
+                    }
+                  },
+                  "required": ["name", "type"]
+                }
+              },
+              "required": ["id", "name", "specialty"]
+            }
+          },
+          "required": ["id", "date", "type", "provider"]
+        },
+        "vital_signs": {
+          "type": "object",
+          "properties": {
+            "blood_pressure": {
+              "type": "object",
+              "properties": {
+                "systolic": {
+                  "type": "integer",
+                  "minimum": 50,
+                  "maximum": 300,
+                  "description": "Systolic blood pressure in mmHg"
+                },
+                "diastolic": {
+                  "type": "integer",
+                  "minimum": 30,
+                  "maximum": 200,
+                  "description": "Diastolic blood pressure in mmHg"
+                }
+              },
+              "required": ["systolic", "diastolic"]
+            },
+            "heart_rate": {
+              "type": "integer",
+              "minimum": 30,
+              "maximum": 250,
+              "description": "Heart rate in beats per minute"
+            },
+            "temperature": {
+              "type": "number",
+              "minimum": 90,
+              "maximum": 110,
+              "description": "Body temperature in Fahrenheit"
+            },
+            "respiratory_rate": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 60,
+              "description": "Respiratory rate in breaths per minute"
+            },
+            "oxygen_saturation": {
+              "type": "number",
+              "minimum": 70,
+              "maximum": 100,
+              "description": "Oxygen saturation percentage"
+            },
+            "weight": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000,
+              "description": "Weight in pounds"
+            },
+            "height": {
+              "type": "number",
+              "minimum": 12,
+              "maximum": 96,
+              "description": "Height in inches"
+            },
+            "bmi": {
+              "type": "number",
+              "minimum": 10,
+              "maximum": 80,
+              "description": "Body Mass Index"
+            }
+          }
+        },
+        "diagnoses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "ICD-10 diagnosis code"
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500,
+                "description": "Diagnosis description"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["primary", "secondary", "admitting", "discharge"],
+                "description": "Type of diagnosis"
+              },
+              "onset_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Date of diagnosis onset"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["mild", "moderate", "severe", "critical"],
+                "description": "Severity of condition"
+              }
+            },
+            "required": ["code", "description", "type"]
+          }
+        },
+        "medications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Medication name"
+              },
+              "generic_name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Generic medication name"
+              },
+              "dosage": {
+                "type": "string",
+                "description": "Medication dosage"
+              },
+              "frequency": {
+                "type": "string",
+                "enum": [
+                  "once_daily",
+                  "twice_daily",
+                  "three_times_daily",
+                  "four_times_daily",
+                  "as_needed",
+                  "weekly",
+                  "monthly"
+                ],
+                "description": "Medication frequency"
+              },
+              "route": {
+                "type": "string",
+                "enum": [
+                  "oral",
+                  "intravenous",
+                  "intramuscular",
+                  "subcutaneous",
+                  "topical",
+                  "inhalation",
+                  "rectal",
+                  "other"
+                ],
+                "description": "Route of administration"
+              },
+              "start_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Medication start date"
+              },
+              "end_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Medication end date"
+              },
+              "prescriber": {
+                "type": "string",
+                "description": "Prescribing provider identifier"
+              }
+            },
+            "required": ["name", "dosage", "frequency", "route", "start_date"]
+          }
+        },
+        "allergies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "allergen": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Allergen name"
+              },
+              "type": {
+                "type": "string",
+                "enum": ["drug", "food", "environmental", "other"],
+                "description": "Type of allergen"
+              },
+              "reaction": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Allergic reaction description"
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["mild", "moderate", "severe", "life_threatening"],
+                "description": "Severity of allergic reaction"
+              },
+              "onset_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Date allergy was first identified"
+              }
+            },
+            "required": ["allergen", "type", "reaction", "severity"]
+          }
+        },
+        "lab_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "test_name": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "Laboratory test name"
+              },
+              "test_code": {
+                "type": "string",
+                "description": "LOINC test code"
+              },
+              "result_value": {
+                "type": "string",
+                "description": "Test result value"
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 20,
+                "description": "Unit of measurement"
+              },
+              "reference_range": {
+                "type": "string",
+                "description": "Normal reference range"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["normal", "abnormal", "critical", "pending"],
+                "description": "Result status"
+              },
+              "collection_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Specimen collection date and time"
+              },
+              "result_date": {
+                "type": "string",
+                "format": "date-time",
+                "description": "Result reporting date and time"
+              }
+            },
+            "required": ["test_name", "result_value", "collection_date"]
+          }
+        }
+      },
+      "required": ["record_id", "encounter"]
+    },
+    "ai_insights": {
+      "type": "object",
+      "properties": {
+        "risk_scores": {
+          "type": "object",
+          "properties": {
+            "readmission_risk": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "30-day readmission risk score"
+            },
+            "mortality_risk": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "In-hospital mortality risk score"
+            },
+            "sepsis_risk": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Sepsis development risk score"
+            }
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["medication", "procedure", "follow_up", "lifestyle", "monitoring"],
+                "description": "Type of recommendation"
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500,
+                "description": "Recommendation description"
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "urgent"],
+                "description": "Recommendation priority"
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "AI model confidence score"
+              }
+            },
+            "required": ["type", "description", "priority", "confidence"]
+          }
+        },
+        "model_metadata": {
+          "type": "object",
+          "properties": {
+            "model_version": {
+              "type": "string",
+              "description": "AI model version used"
+            },
+            "processing_timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When AI analysis was performed"
+            },
+            "data_quality_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Quality score of input data"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["patient", "medical_record"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "patient": {
+        "id": "PAT-12345678-1234-5678-9ABC-123456789012",
+        "demographics": {
+          "age": 45,
+          "gender": "female",
+          "ethnicity": "not_hispanic_latino",
+          "race": ["white"]
+        },
+        "contact": {
+          "preferred_language": "en",
+          "emergency_contact": {
+            "name": "John Doe",
+            "relationship": "spouse",
+            "phone": "+1234567890"
+          }
+        }
+      },
+      "medical_record": {
+        "record_id": "MR-987654321",
+        "encounter": {
+          "id": "ENC-456789",
+          "date": "2025-01-15T10:30:00Z",
+          "type": "outpatient",
+          "provider": {
+            "id": "PROV-123",
+            "name": "Dr. Jane Smith",
+            "specialty": "family_medicine",
+            "facility": {
+              "name": "City Medical Center",
+              "type": "clinic",
+              "location": {
+                "city": "Springfield",
+                "state": "IL",
+                "country": "US"
+              }
+            }
+          }
+        },
+        "vital_signs": {
+          "blood_pressure": {
+            "systolic": 120,
+            "diastolic": 80
+          },
+          "heart_rate": 72,
+          "temperature": 98.6,
+          "respiratory_rate": 16,
+          "oxygen_saturation": 98,
+          "weight": 150,
+          "height": 65,
+          "bmi": 24.9
+        },
+        "diagnoses": [
+          {
+            "code": "E11.9",
+            "description": "Type 2 diabetes mellitus without complications",
+            "type": "primary",
+            "onset_date": "2020-03-15",
+            "severity": "moderate"
+          }
+        ],
+        "medications": [
+          {
+            "name": "Metformin",
+            "generic_name": "metformin hydrochloride",
+            "dosage": "500mg",
+            "frequency": "twice_daily",
+            "route": "oral",
+            "start_date": "2020-03-15",
+            "prescriber": "PROV-123"
+          }
+        ]
+      },
+      "ai_insights": {
+        "risk_scores": {
+          "readmission_risk": 0.15,
+          "mortality_risk": 0.02,
+          "sepsis_risk": 0.05
+        },
+        "recommendations": [
+          {
+            "type": "follow_up",
+            "description": "Schedule HbA1c test in 3 months",
+            "priority": "medium",
+            "confidence": 0.85
+          }
+        ],
+        "model_metadata": {
+          "model_version": "v3.2.1",
+          "processing_timestamp": "2025-01-15T10:35:00Z",
+          "data_quality_score": 0.92
+        }
+      }
+    }
+  ]
+}

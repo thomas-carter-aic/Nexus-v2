@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "platform-overview",
+    "title": "Platform Overview",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Sagas Started",
+        "targets": [
+          {
+            "expr": "increase(orchestration_saga_started_total[5m])"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Sagas Failed",
+        "targets": [
+          {
+            "expr": "increase(orchestration_saga_failures_total[5m])"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "DLQ Messages",
+        "targets": [
+          {
+            "expr": "increase(kafka_consumer_lag_total{topic=\"platform-dlq\"}[5m])"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "Event Throughput",
+        "targets": [
+          {
+            "expr": "increase(platform_events_ingested_total[1m])"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+name: Generate Changelog and Release
+
+on:
+  push:
+    tags:
+      - 'v*'   # Runs when you push a tag like v1.0.0
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Changelogit
+        run: npm install -g changelogit
+
+      # Internal changelog (full)
+      - name: Generate internal changelog
+        run: changelogit --output CHANGELOG.md --style conventional --include-types feat,fix,chore,docs,refactor,perf,ci
+
+      # External changelog (filtered for users)
+      - name: Generate external changelog
+        run: changelogit --output CHANGELOG_PUBLIC.md --style summary --include-types feat,fix --exclude-types chore,docs,refactor,perf,ci
+
+      - name: Commit and push changelogs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md CHANGELOG_PUBLIC.md
+          git commit -m "chore: update changelogs [skip ci]" || echo "No changes"
+          git push
+
+      # Create GitHub Release with external changelog
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: CHANGELOG_PUBLIC.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

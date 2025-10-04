@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "orchestration-service.name" . }}
+spec:
+  selector:
+    app: {{ include "orchestration-service.name" . }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.readinessProbe.httpGet.port }}
+      targetPort: {{ .Values.readinessProbe.httpGet.port }}

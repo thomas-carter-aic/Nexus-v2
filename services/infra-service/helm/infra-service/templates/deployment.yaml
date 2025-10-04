@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "infra-service.fullname" . }}
+  labels:
+    app: {{ include "infra-service.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "infra-service.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "infra-service.name" . }}
+    spec:
+      containers:
+        - name: {{ include "infra-service.name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.readinessProbe.httpGet.port }}
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: "{{ .Values.kafka.bootstrap }}"
+          readinessProbe:
+            {{ toYaml .Values.readinessProbe | indent 12 }}
+          livenessProbe:
+            {{ toYaml .Values.livenessProbe | indent 12 }}
+          resources:
+            {{ toYaml .Values.resources | indent 12 }}

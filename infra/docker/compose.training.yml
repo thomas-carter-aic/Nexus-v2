@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  mini_gpt_train:
+    build:
+      context: .
+      dockerfile: Dockerfile.training
+    volumes:
+      - ./data:/app/data
+      - ./checkpoints:/app/checkpoints
+    environment:
+      - DEVICE=cpu

@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.AppProvisioned",
+  "type": "object",
+  "properties": {
+    "appId": {
+      "type": "string"
+    },
+    "tenantId": {
+      "type": "string"
+    },
+    "provisionedAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "appId",
+    "tenantId",
+    "provisionedAt"
+  ]
+}

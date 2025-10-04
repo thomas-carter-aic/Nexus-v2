@@ -1,0 +1,20 @@
+name: Orchestration Integration Tests
+on: [push,pull_request]
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20
+      - name: Start Docker (for dockertest)
+        run: |
+          docker version
+      - name: Run tests
+        env:
+          GO111MODULE: on
+        run: |
+          cd services/orchestration-service
+          go test ./... -v

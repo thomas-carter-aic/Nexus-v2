@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+name: auth-service
+namespace: argocd
+spec:
+project: default
+source:
+ repoURL: 'https://github.com/yourorg/ai-paas-monorepo.git'
+ targetRevision: main
+ path: gitops/manifests
+destination:
+ server: 'https://kubernetes.default.svc'
+ namespace: default
+syncPolicy:
+ automated:
+   prune: true
+   selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+name: auth-service
+namespace: default
+spec:
+replicas: 1
+selector:
+ matchLabels:
+   app: auth-service
+template:
+ metadata:
+   labels:
+     app: auth-service
+ spec:
+   containers:
+   - name: auth-service
+     image: yourdockerhub/auth-service:latest
+     ports:
+     - containerPort: 8000
+strategy:
+ canary:
+   steps:
+   - setWeight: 10
+   - pause: { duration: 60s }
+   - setWeight: 50
+   - pause: { duration: 60s }
+   - setWeight: 100
+   maxSurge: "25%"
+   maxUnavailable: 0

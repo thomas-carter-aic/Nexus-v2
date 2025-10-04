@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ci-images
+spec:
+  type: ClusterIP
+  selector:
+    app: ci-images
+  ports:
+    - port: 80
+      targetPort: 80

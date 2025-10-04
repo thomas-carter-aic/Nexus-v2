@@ -1,0 +1,7 @@
+fastapi==0.115.2
+uvicorn==0.32.0
+confluent-kafka==2.5.3
+pyjwt==2.9.0
+sqlalchemy==2.0.35
+pymongo==4.10.1
+prometheus-flask-exporter==0.23.1

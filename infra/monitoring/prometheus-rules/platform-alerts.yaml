@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: platform-alerts
+  labels:
+    role: alert-rules
+spec:
+  groups:
+    - name: platform.rules
+      rules:
+        - alert: HighDLQRate
+          expr: increase(kafka_consumer_lag_total{topic="platform-dlq"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Dead-letter queue activity detected"
+            description: "Messages are appearing in platform-dlq topic."
+        - alert: HighSagaFailures
+          expr: increase(orchestration_saga_failures_total[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Saga failures detected"
+            description: "Number of failed sagas increased in the last 5 minutes."

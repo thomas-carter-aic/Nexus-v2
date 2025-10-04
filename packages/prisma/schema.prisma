@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model NewsletterSubscription {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  source      String?  // Where they signed up (homepage, about, etc.)
+  ipAddress   String?
+  userAgent   String?
+  status      SubscriptionStatus @default(PENDING)
+  crmId       String?  // SuiteCRM contact ID
+  crmSynced   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Audit trail
+  syncAttempts Int @default(0)
+  lastSyncAt   DateTime?
+  syncError    String?
+
+  // Relations
+  syncJobs SyncJob[]
+
+  @@map("newsletter_subscriptions")
+}
+
+enum SubscriptionStatus {
+  PENDING
+  CONFIRMED
+  UNSUBSCRIBED
+  FAILED
+}
+
+model SyncJob {
+  id            String    @id @default(cuid())
+  subscriptionId String
+  jobId         String    @unique // BullMQ job ID
+  status        JobStatus @default(PENDING)
+  attempts      Int       @default(0)
+  maxAttempts   Int       @default(3)
+  error         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  completedAt   DateTime?
+
+  subscription NewsletterSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@map("sync_jobs")
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  RETRYING
+}
+
+// Job Application System Models
+model JobPosting {
+  id          String   @id @default(cuid())
+  title       String
+  department  String
+  location    String
+  type        JobType
+  description String   @db.Text
+  requirements String[]
+  salary      String?
+  benefits    String?  @db.Text
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  applications Application[]
+  
+  @@map("job_postings")
+}
+
+model Application {
+  id           String            @id @default(cuid())
+  jobId        String            @map("job_id")
+  firstName    String            @map("first_name")
+  lastName     String            @map("last_name")
+  email        String
+  phone        String
+  resumeUrl    String            @map("resume_url")
+  coverLetter  String?           @map("cover_letter") @db.Text
+  status       ApplicationStatus @default(SUBMITTED)
+  submittedAt  DateTime          @default(now()) @map("submitted_at")
+  reviewedAt   DateTime?         @map("reviewed_at")
+  reviewedBy   String?           @map("reviewed_by")
+  notes        String?           @db.Text
+  
+  job JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  
+  @@map("applications")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  INTERVIEW_SCHEDULED
+  INTERVIEWED
+  OFFER_EXTENDED
+  HIRED
+  REJECTED
+  WITHDRAWN
+}

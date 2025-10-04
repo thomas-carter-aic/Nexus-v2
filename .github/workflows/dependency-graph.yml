@@ -1,0 +1,33 @@
+name: Monorepo Dependency Graph
+
+on:
+  workflow_dispatch:
+    inputs:
+      output-format:
+        description: 'Graph output format (dot, svg, png)'
+        required: false
+        default: svg
+
+jobs:
+  generate-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install monorepo CLI dependencies
+        run: |
+          cd monorepo-manager
+          npm install
+
+      - name: Generate dependency graph
+        run: |
+          FORMAT="${{ github.event.inputs.output-format }}"
+          mkdir -p $GITHUB_WORKSPACE/graphs
+          npx ts-node src/cli.ts graph --format $FORMAT --out $GITHUB_WORKSPACE/graphs/dependency-graph.$FORMAT
+          ls -lh $GITHUB_WORKSPACE/graphs

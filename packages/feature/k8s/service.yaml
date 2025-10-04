@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feature
+spec:
+  type: ClusterIP
+  selector:
+    app: feature
+  ports:
+    - port: 80
+      targetPort: 80

@@ -1,0 +1,47 @@
+# AIC AI Platform - Minimal Cost Development Configuration
+# This configuration minimizes costs for development/testing
+
+# Basic Configuration
+cluster_name = "aic-aipaas-eks-dev"
+aws_region   = "us-east-1"
+environment  = "dev"
+
+# Kubernetes Configuration
+kubernetes_version = "1.28"
+
+# Maximum Cost Optimization
+single_nat_gateway         = true
+enable_deletion_protection = false
+
+# Minimal Logging (reduce CloudWatch costs)
+log_retention_days = 1
+
+# Node Group Sizing - START WITH ZERO NODES
+# System nodes (for core Kubernetes services) - START MINIMAL
+system_node_min_size     = 0  # Start with 0
+system_node_max_size     = 2  # Allow scaling up for testing
+system_node_desired_size = 0  # Start with 0
+
+# Application nodes - START WITH ZERO
+app_node_min_size     = 0  # Start with 0
+app_node_max_size     = 5  # Allow scaling up for testing
+app_node_desired_size = 0  # Start with 0
+
+# GPU nodes - KEEP AT ZERO
+gpu_node_min_size     = 0
+gpu_node_max_size     = 2  # Small max for testing
+gpu_node_desired_size = 0
+
+# Use smaller instance types for cost savings
+system_instance_types = ["t3.small"]      # Cheaper than t3.medium
+app_instance_types    = ["t3.medium"]     # Cheaper than t3.large
+
+# Tags
+common_tags = {
+  Project     = "AIC-AIPaaS"
+  Environment = "dev-minimal"
+  ManagedBy   = "Terraform"
+  Owner       = "Platform-Team"
+  CostCenter  = "Engineering"
+  Purpose     = "Development-Testing"
+}

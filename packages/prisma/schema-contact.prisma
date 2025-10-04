@@ -1,0 +1,208 @@
+// Contact Management Schema Extension
+// Add these models to your existing schema.prisma
+
+model ContactSubmission {
+  id              String   @id @default(cuid())
+  
+  // Contact Information
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+  company         String?
+  jobTitle        String?
+  website         String?
+  
+  // Inquiry Details
+  service         String?  // Selected service interest
+  budget          String?  // Budget range
+  timeline        String?  // Project timeline
+  message         String
+  
+  // Lead Qualification
+  leadScore       Int      @default(0)
+  priority        ContactPriority @default(MEDIUM)
+  source          String?  // How they found us
+  referrer        String?  // Referring URL
+  
+  // Contact Preferences
+  preferredContact ContactMethod @default(EMAIL)
+  bestTimeToCall  String?
+  timezone        String?
+  
+  // Status Tracking
+  status          ContactStatus @default(NEW)
+  assignedTo      String?  // Team member assigned
+  
+  // CRM Integration
+  crmId           String?  // SuiteCRM contact ID
+  crmSynced       Boolean  @default(false)
+  crmSyncError    String?
+  
+  // Response Tracking
+  responded       Boolean  @default(false)
+  respondedAt     DateTime?
+  responseTime    Int?     // Hours to first response
+  
+  // Metadata
+  ipAddress       String?
+  userAgent       String?
+  sessionId       String?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  attachments     ContactAttachment[]
+  activities      ContactActivity[]
+  followUps       ContactFollowUp[]
+  
+  @@map("contact_submissions")
+  @@index([email])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+  @@index([leadScore])
+}
+
+model ContactAttachment {
+  id          String   @id @default(cuid())
+  contactId   String
+  filename    String
+  originalName String
+  mimeType    String
+  size        Int
+  path        String
+  
+  createdAt   DateTime @default(now())
+  
+  contact     ContactSubmission @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  @@map("contact_attachments")
+}
+
+model ContactActivity {
+  id          String   @id @default(cuid())
+  contactId   String
+  type        ActivityType
+  description String
+  performedBy String?  // User who performed the activity
+  metadata    Json?    // Additional activity data
+  
+  createdAt   DateTime @default(now())
+  
+  contact     ContactSubmission @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  @@map("contact_activities")
+}
+
+model ContactFollowUp {
+  id           String   @id @default(cuid())
+  contactId    String
+  type         FollowUpType
+  scheduledFor DateTime
+  completed    Boolean  @default(false)
+  completedAt  DateTime?
+  notes        String?
+  assignedTo   String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  contact      ContactSubmission @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  @@map("contact_follow_ups")
+}
+
+model ContactTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  type        TemplateType
+  subject     String?
+  content     String
+  variables   Json?    // Template variables
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("contact_templates")
+  @@unique([name, type])
+}
+
+model ContactSettings {
+  id                    String   @id @default(cuid())
+  autoResponseEnabled   Boolean  @default(true)
+  responseTimeSLA       Int      @default(24) // hours
+  businessHoursStart    String   @default("09:00")
+  businessHoursEnd      String   @default("17:00")
+  businessTimezone      String   @default("America/Los_Angeles")
+  leadScoringEnabled    Boolean  @default(true)
+  notificationsEnabled  Boolean  @default(true)
+  
+  updatedAt            DateTime @updatedAt
+  
+  @@map("contact_settings")
+}
+
+enum ContactStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL_SENT
+  NEGOTIATING
+  CLOSED_WON
+  CLOSED_LOST
+  NURTURING
+  UNRESPONSIVE
+}
+
+enum ContactPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ContactMethod {
+  EMAIL
+  PHONE
+  VIDEO_CALL
+  IN_PERSON
+}
+
+enum ActivityType {
+  FORM_SUBMISSION
+  EMAIL_SENT
+  EMAIL_OPENED
+  EMAIL_CLICKED
+  PHONE_CALL
+  MEETING_SCHEDULED
+  MEETING_COMPLETED
+  PROPOSAL_SENT
+  CONTRACT_SIGNED
+  NOTE_ADDED
+  STATUS_CHANGED
+  CRM_SYNC
+}
+
+enum FollowUpType {
+  AUTO_RESPONSE
+  QUALIFICATION_CALL
+  PROPOSAL_FOLLOWUP
+  CHECK_IN
+  NURTURE_EMAIL
+  MEETING_REMINDER
+  CONTRACT_FOLLOWUP
+}
+
+enum TemplateType {
+  AUTO_RESPONSE
+  QUALIFICATION
+  PROPOSAL
+  FOLLOWUP
+  NURTURE
+  MEETING_CONFIRMATION
+  THANK_YOU
+}

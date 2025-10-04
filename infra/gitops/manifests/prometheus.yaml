@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+name: prometheus
+namespace: argocd
+spec:
+project: default
+source:
+ repoURL: 'https://github.com/yourorg/ai-paas-monorepo.git'
+ targetRevision: main
+ path: gitops/manifests
+destination:
+ server: 'https://kubernetes.default.svc'
+ namespace: monitoring
+syncPolicy:
+ automated:
+   prune: true
+   selfHeal: true
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+name: prometheus
+namespace: monitoring
+spec:
+replicas: 1
+serviceMonitorSelector:
+ matchLabels:
+   app: auth-service

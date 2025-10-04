@@ -1,0 +1,89 @@
+// AI Readiness Assessment Schema Extension
+// Add these models to your existing schema.prisma
+
+model AssessmentSubmission {
+  id              String   @id @default(cuid())
+  email           String
+  companyName     String?
+  contactName     String?
+  phone           String?
+  
+  // Assessment responses (JSON)
+  responses       Json
+  
+  // Calculated scores
+  overallScore    Float
+  categoryScores  Json     // { "strategy": 85, "data": 70, "technology": 90, etc. }
+  
+  // Report generation
+  reportGenerated Boolean  @default(false)
+  reportPath      String?
+  reportUrl       String?
+  reportSentAt    DateTime?
+  
+  // Metadata
+  ipAddress       String?
+  userAgent       String?
+  source          String?  // Where they accessed the assessment
+  
+  // Status tracking
+  status          AssessmentStatus @default(SUBMITTED)
+  processingError String?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  followUps       AssessmentFollowUp[]
+  
+  @@map("assessment_submissions")
+  @@index([email])
+  @@index([createdAt])
+}
+
+model AssessmentFollowUp {
+  id           String   @id @default(cuid())
+  assessmentId String
+  type         FollowUpType
+  scheduledFor DateTime
+  completed    Boolean  @default(false)
+  completedAt  DateTime?
+  notes        String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  assessment   AssessmentSubmission @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  
+  @@map("assessment_follow_ups")
+}
+
+model AssessmentTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  version     String
+  questions   Json     // Question structure and scoring
+  isActive    Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("assessment_templates")
+  @@unique([name, version])
+}
+
+enum AssessmentStatus {
+  SUBMITTED
+  PROCESSING
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
+enum FollowUpType {
+  EMAIL_REMINDER
+  CONSULTATION_OFFER
+  SALES_CONTACT
+  SURVEY_FEEDBACK
+}

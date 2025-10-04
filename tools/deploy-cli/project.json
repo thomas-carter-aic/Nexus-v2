@@ -1,0 +1,8 @@
+{
+  "name": "deploy-cli",
+  "targets": {
+    "build": { "executor": "nx:run-commands", "options": { "command": "cargo build --release" }, "outputs": ["target/release"] },
+    "test": { "executor": "nx:run-commands", "options": { "command": "cargo test" } },
+    "run": { "executor": "nx:run-commands", "options": { "command": "cargo run" } }
+  }
+}

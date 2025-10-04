@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Simple migration runner wrapper which calls a built-in migration command if present
+if command -v orchestration >/dev/null 2>&1; then
+  orchestration migrate ./migrations || true
+else
+  echo "No orchestration binary found; skipping migrations"
+fi

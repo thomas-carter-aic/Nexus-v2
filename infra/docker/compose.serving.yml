@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  mini_gpt_serve:
+    build:
+      context: .
+      dockerfile: Dockerfile.serving
+    ports:
+      - "8000:8000"
+    environment:
+      - DEVICE=cpu

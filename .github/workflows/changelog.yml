@@ -1,0 +1,37 @@
+name: Generate Changelog
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Changelogit
+        run: npm install -g changelogit
+
+      # Internal (full) changelog
+      - name: Generate internal changelog
+        run: changelogit --output CHANGELOG.md --style conventional --include-types feat,fix,chore,docs,refactor,perf,ci
+
+      # External (public) changelog
+      - name: Generate external changelog
+        run: changelogit --output CHANGELOG_PUBLIC.md --style summary --include-types feat,fix --exclude-types chore,docs,refactor,perf,ci
+
+      - name: Commit and push changelogs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md CHANGELOG_PUBLIC.md
+          git commit -m "chore: update changelogs [skip ci]" || echo "No changes"
+          git push

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rpc
+spec:
+  type: ClusterIP
+  selector:
+    app: rpc
+  ports:
+    - port: 80
+      targetPort: 80

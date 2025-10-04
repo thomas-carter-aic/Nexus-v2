@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-lib
+spec:
+  type: ClusterIP
+  selector:
+    app: config-lib
+  ports:
+    - port: 80
+      targetPort: 80

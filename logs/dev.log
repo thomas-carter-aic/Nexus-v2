@@ -1,0 +1,969 @@
+
+> aic-website@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.3.5
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.251:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.7s
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (1544 modules)
+ GET / 200 in 2901ms
+ ✓ Compiled in 1749ms (724 modules)
+ ✓ Compiled in 326ms (724 modules)
+ GET / 200 in 204ms
+ ○ Compiling /about ...
+ ✓ Compiled /about in 739ms (1560 modules)
+ GET /about 200 in 1018ms
+ ✓ Compiled /contact in 409ms (1569 modules)
+ GET /contact 200 in 608ms
+ ✓ Compiled /consultation in 334ms (1574 modules)
+ GET /consultation 200 in 524ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 1562ms (1704 modules)
+ GET /admin 200 in 1998ms
+ ○ Compiling /client ...
+ ✓ Compiled /client in 2.1s (1748 modules)
+ GET /client 200 in 2335ms
+ ○ Compiling /ir ...
+ ✓ Compiled /ir in 516ms (1786 modules)
+ GET /ir 200 in 648ms
+ ✓ Compiled /_not-found in 453ms (1790 modules)
+ GET /admin/settings 404 in 538ms
+ GET /admin/analytics 404 in 30ms
+ GET /admin/audit-logs 404 in 30ms
+ GET /client/settings 404 in 33ms
+ GET /ir/updates 404 in 31ms
+ GET /ir/board-meetings 404 in 28ms
+ GET / 200 in 310ms
+ ✓ Compiled in 894ms (1790 modules)
+ ✓ Compiled in 576ms (819 modules)
+ ✓ Compiled in 828ms (819 modules)
+ ✓ Compiled in 423ms (805 modules)
+ ✓ Compiled in 904ms (819 modules)
+ ✓ Compiled in 845ms (819 modules)
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 1212ms (1275 modules)
+ GET /admin/settings 200 in 1566ms
+ ○ Compiling /admin/analytics ...
+ ✓ Compiled /admin/analytics in 2.2s (1808 modules)
+ ⨯ TypeError: Super expression must either be null or a function
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:42)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:42)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:42)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:42)
+    at eval (webpack-internal:///(rsc)/./src/app/admin/analytics/page.tsx:9:189)
+    at <unknown> (rsc)/./src/app/admin/analytics/page.tsx (/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/.next/server/app/admin/analytics/page.js:84:1)
+    at Function.__webpack_require__ (.next/server/webpack-runtime.js:33:42) {
+  page: '/admin/analytics'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 4s (2139 modules)
+ GET /admin/analytics 500 in 7427ms
+ ○ Compiling /admin/audit-logs ...
+ ✓ Compiled /admin/audit-logs in 1061ms (2149 modules)
+ GET /admin/audit-logs 200 in 1457ms
+ ○ Compiling /client/settings ...
+ ✓ Compiled /client/settings in 691ms (2169 modules)
+ GET /client/settings 200 in 984ms
+ ○ Compiling /ir/updates ...
+ ✓ Compiled /ir/updates in 774ms (2193 modules)
+ GET /ir/updates 200 in 1053ms
+ ✓ Compiled /ir/board-meetings in 462ms (2198 modules)
+ GET /ir/board-meetings 200 in 774ms
+ ✓ Compiled in 387ms (2198 modules)
+ ✓ Compiled in 1063ms (1116 modules)
+ ⨯ ./src/app/admin/analytics/page.tsx
+Error:   [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+   ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:6:1]
+ [2m3[0m | import { TrendingUp, Users, Brain, Activity, Calendar, Download } from 'lucide-react';
+ [2m4[0m | 
+ [2m5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+   : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+   `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:7:1]
+ [2m 4[0m | 
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:8:1]
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:9:1]
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:10:1]
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    : [35;1m                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:11:1]
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    : [35;1m                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:12:1]
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    : [35;1m                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:13:1]
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    : [35;1m                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:14:1]
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:15:1]
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:16:1]
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:17:1]
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+ [2m20[0m |   title: 'Analytics - Admin Portal',
+    `----
+
+Import trace for requested module:
+./src/app/admin/analytics/page.tsx
+ ○ Compiling /_not-found ...
+ ⨯ ./src/app/admin/analytics/page.tsx
+Error:   [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+   ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:6:1]
+ [2m3[0m | import { TrendingUp, Users, Brain, Activity, Calendar, Download } from 'lucide-react';
+ [2m4[0m | 
+ [2m5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+   : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+   `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:7:1]
+ [2m 4[0m | 
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:8:1]
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:9:1]
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:10:1]
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    : [35;1m                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:11:1]
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    : [35;1m                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:12:1]
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    : [35;1m                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:13:1]
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    : [35;1m                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:14:1]
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:15:1]
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:16:1]
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:17:1]
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+ [2m20[0m |   title: 'Analytics - Admin Portal',
+    `----
+
+Import trace for requested module:
+./src/app/admin/analytics/page.tsx
+ ⨯ ./src/app/admin/analytics/page.tsx
+Error:   [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+   ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:6:1]
+ [2m3[0m | import { TrendingUp, Users, Brain, Activity, Calendar, Download } from 'lucide-react';
+ [2m4[0m | 
+ [2m5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+   : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+   `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:7:1]
+ [2m 4[0m | 
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:8:1]
+ [2m 5[0m | // Dynamically import Recharts components to avoid SSR issues
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:9:1]
+ [2m 6[0m | const BarChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.BarChart })), { ssr: false });
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+    : [35;1m              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:10:1]
+ [2m 7[0m | const Bar = dynamic(() => import('recharts').then((mod) => ({ default: mod.Bar })), { ssr: false });
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+    : [35;1m                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:11:1]
+ [2m 8[0m | const XAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.XAxis })), { ssr: false });
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+    : [35;1m                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:12:1]
+ [2m 9[0m | const YAxis = dynamic(() => import('recharts').then((mod) => ({ default: mod.YAxis })), { ssr: false });
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+    : [35;1m                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:13:1]
+ [2m10[0m | const CartesianGrid = dynamic(() => import('recharts').then((mod) => ({ default: mod.CartesianGrid })), { ssr: false });
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+    : [35;1m                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:14:1]
+ [2m11[0m | const Tooltip = dynamic(() => import('recharts').then((mod) => ({ default: mod.Tooltip })), { ssr: false });
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:15:1]
+ [2m12[0m | const ResponsiveContainer = dynamic(() => import('recharts').then((mod) => ({ default: mod.ResponsiveContainer })), { ssr: false });
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+    : [35;1m                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:16:1]
+ [2m13[0m | const LineChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.LineChart })), { ssr: false });
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+    : [35;1m            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+    `----
+  [31mx[0m `ssr: false` is not allowed with `next/dynamic` in Server Components. Please move it into a client component.
+    ,-[[36;1;4m/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/src/app/admin/analytics/page.tsx[0m:17:1]
+ [2m14[0m | const Line = dynamic(() => import('recharts').then((mod) => ({ default: mod.Line })), { ssr: false });
+ [2m15[0m | const PieChart = dynamic(() => import('recharts').then((mod) => ({ default: mod.PieChart })), { ssr: false });
+ [2m16[0m | const Pie = dynamic(() => import('recharts').then((mod) => ({ default: mod.Pie })), { ssr: false });
+ [2m17[0m | const Cell = dynamic(() => import('recharts').then((mod) => ({ default: mod.Cell })), { ssr: false });
+    : [35;1m             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m18[0m | 
+ [2m19[0m | export const metadata: Metadata = {
+ [2m20[0m |   title: 'Analytics - Admin Portal',
+    `----
+
+Import trace for requested module:
+./src/app/admin/analytics/page.tsx
+ GET /admin/analytics 500 in 3967ms
+ ✓ Compiled /_error in 1092ms (1624 modules)
+ ✓ Compiled in 869ms (1627 modules)
+ GET /admin/analytics 200 in 439ms
+ ✓ Compiled /admin/settings in 184ms (526 modules)
+ GET /admin/settings 200 in 624ms
+ GET /admin/analytics 200 in 111ms
+ ✓ Compiled /admin/audit-logs in 150ms (536 modules)
+ GET /admin/audit-logs 200 in 444ms
+ ✓ Compiled /client/settings in 178ms (556 modules)
+ GET /client/settings 200 in 359ms
+ ✓ Compiled /ir/updates in 186ms (580 modules)
+ GET /ir/updates 200 in 420ms
+ ✓ Compiled /ir/board-meetings in 178ms (585 modules)
+ GET /ir/board-meetings 200 in 456ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 524ms (1637 modules)
+ GET /case-studies 404 in 636ms
+ GET /careers 404 in 38ms
+ GET /blog 404 in 31ms
+ GET /partners 404 in 34ms
+ GET /docs 404 in 34ms
+ GET /nexus 404 in 37ms
+ GET /assessment 404 in 34ms
+ ○ Compiling / ...
+ ✓ Compiled / in 913ms (985 modules)
+ GET / 200 in 1441ms
+ GET /services/strategy 404 in 143ms
+ GET /services/implementation 404 in 61ms
+ GET /services/governance 404 in 61ms
+ GET /services/training 404 in 79ms
+ GET /services/innovation 404 in 57ms
+ GET /services/optimization 404 in 47ms
+ GET /solutions/smb 404 in 69ms
+ GET /solutions/enterprise 404 in 71ms
+ GET /solutions/healthcare 404 in 50ms
+ GET /solutions/financial 404 in 45ms
+ GET /solutions/manufacturing 404 in 37ms
+ GET /solutions/retail 404 in 39ms
+ GET /case-studies 404 in 51ms
+ GET /careers 404 in 62ms
+ GET /blog 404 in 50ms
+ GET /partners 404 in 58ms
+ GET /docs 404 in 46ms
+ GET /nexus 404 in 34ms
+ GET /assessment 404 in 40ms
+ GET /resources/whitepapers 404 in 40ms
+ GET /resources/webinars 404 in 42ms
+ GET /support 404 in 58ms
+ GET /privacy 404 in 55ms
+ GET /terms 404 in 43ms
+ GET /cookies 404 in 43ms
+ GET /security 404 in 36ms
+ ✓ Compiled in 2.7s (1102 modules)
+ ✓ Compiled in 2.4s (1102 modules)
+ ✓ Compiled in 1140ms (1116 modules)
+ ✓ Compiled in 1460ms (1102 modules)
+ ✓ Compiled in 1398ms (1116 modules)
+ ○ Compiling /case-studies ...
+ ✓ Compiled /case-studies in 1564ms (1555 modules)
+ GET /case-studies 200 in 2013ms
+ ✓ Compiled /careers in 323ms (1563 modules)
+ GET /careers 200 in 669ms
+ ✓ Compiled /privacy in 336ms (1565 modules)
+ GET /privacy 200 in 577ms
+ ✓ Compiled /terms in 426ms (1567 modules)
+ GET /terms 200 in 636ms
+ ○ Compiling /support ...
+ ✓ Compiled /support in 549ms (1575 modules)
+ GET /support 200 in 754ms
+ ✓ Compiled in 664ms (1062 modules)
+ ✓ Compiled in 1848ms (1116 modules)
+ ✓ Compiled in 1189ms (1116 modules)
+ ○ Compiling /services/strategy ...
+ ✓ Compiled /services/strategy in 745ms (1555 modules)
+ GET /services/strategy 200 in 1169ms
+ ✓ Compiled /nexus in 499ms (1561 modules)
+ GET /nexus 200 in 682ms
+ GET /services/strategy 200 in 120ms
+ ✓ Compiled /_not-found in 484ms (1565 modules)
+ GET /services/implementation 404 in 577ms
+ GET /services/governance 404 in 31ms
+ GET /services/training 404 in 38ms
+ GET /services/innovation 404 in 30ms
+ GET /services/optimization 404 in 31ms
+ GET /solutions/smb 404 in 35ms
+ GET /solutions/enterprise 404 in 29ms
+ GET /solutions/healthcare 404 in 29ms
+ GET /solutions/financial 404 in 29ms
+ GET /solutions/manufacturing 404 in 30ms
+ GET /solutions/retail 404 in 29ms
+ ○ Compiling /case-studies ...
+ ✓ Compiled /case-studies in 507ms (520 modules)
+ GET /case-studies 200 in 730ms
+ ✓ Compiled /careers in 164ms (527 modules)
+ GET /careers 200 in 430ms
+ GET /blog 404 in 42ms
+ GET /partners 404 in 29ms
+ GET /docs 404 in 38ms
+ GET /nexus 200 in 118ms
+ GET /assessment 404 in 29ms
+ GET /resources/whitepapers 404 in 34ms
+ GET /resources/webinars 404 in 33ms
+ ✓ Compiled /support in 190ms (535 modules)
+ GET /support 200 in 418ms
+ ✓ Compiled /privacy in 205ms (537 modules)
+ GET /privacy 200 in 395ms
+ ✓ Compiled /terms in 215ms (539 modules)
+ GET /terms 200 in 384ms
+ GET /cookies 404 in 38ms
+ GET /security 404 in 29ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.3s (879 modules)
+ GET / 200 in 2752ms
+ ✓ Compiled /services/strategy in 445ms (894 modules)
+ GET /services/strategy 200 in 597ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 812ms (1946 modules)
+ GET /_next/static/webpack/443d54b92cab6423.webpack.hot-update.json 404 in 559ms
+ GET /services/implementation 404 in 936ms
+ GET /services/strategy 200 in 176ms
+ GET /services/implementation 404 in 81ms
+ GET /services/implementation 404 in 144ms
+ GET /services/strategy 200 in 177ms
+ GET /services/governance 404 in 28ms
+ GET /services/governance 404 in 65ms
+ GET /services/strategy 200 in 153ms
+ GET /services/training 404 in 31ms
+ GET /services/training 404 in 41ms
+ GET /services/strategy 200 in 151ms
+ GET /services/innovation 404 in 21ms
+ GET /services/innovation 404 in 67ms
+ GET /services/strategy 200 in 150ms
+ GET /services/optimization 404 in 24ms
+ GET /services/optimization 404 in 43ms
+ GET /services/strategy 200 in 151ms
+ GET /solutions/smb 404 in 17ms
+ GET /solutions/smb 404 in 71ms
+ GET /services/strategy 200 in 151ms
+ ✓ Compiled /case-studies in 371ms (902 modules)
+ GET /case-studies 200 in 508ms
+ GET /case-studies 200 in 62ms
+ ○ Compiling /careers ...
+ ✓ Compiled /careers in 745ms (910 modules)
+ GET /careers 200 in 923ms
+ GET /blog 404 in 42ms
+ GET /blog 404 in 51ms
+ GET /careers 200 in 224ms
+ GET /partners 404 in 29ms
+ GET /partners 404 in 41ms
+ GET /careers 200 in 190ms
+ ✓ Compiled /support in 276ms (918 modules)
+ GET /support 200 in 402ms
+ GET /resources/webinars 404 in 26ms
+ GET /resources/webinars 404 in 65ms
+ GET /support 200 in 173ms
+ GET /resources/whitepapers 404 in 29ms
+ GET /resources/whitepapers 404 in 42ms
+ GET /support 200 in 155ms
+ GET /assessment 404 in 21ms
+ GET /assessment 404 in 45ms
+ GET /support 200 in 155ms
+ ○ Compiling /nexus ...
+ ✓ Compiled /nexus in 719ms (922 modules)
+ GET /nexus 200 in 837ms
+ GET /docs 404 in 29ms
+ GET /docs 404 in 72ms
+ GET /support 200 in 169ms
+ ○ Compiling /ir/portfolio ...
+ ✓ Compiled /ir/portfolio in 3.4s (1988 modules)
+ GET /ir/portfolio 200 in 5232ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 3.7s (2006 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /_next/static/webpack/443d54b92cab6423.webpack.hot-update.json 404 in 4247ms
+ GET /support 200 in 3462ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 4027ms
+ GET /support 200 in 310ms
+ GET /support 200 in 426ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /ir/portfolio 200 in 87ms
+ ✓ Compiled in 1781ms (1622 modules)
+ GET /support 200 in 1656ms
+ GET /ir/portfolio 200 in 1529ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 87ms
+ GET /support 200 in 140ms
+ ✓ Compiled in 1541ms (1622 modules)
+ GET /support 200 in 1138ms
+ GET /support 200 in 50ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 1123ms (573 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1807ms (1624 modules)
+ GET /support 404 in 1516ms
+ GET /support 200 in 72ms
+ GET /support 200 in 256ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /ir/portfolio 200 in 120ms
+ ✓ Compiled in 1867ms (1622 modules)
+ GET /support 200 in 1827ms
+ GET /ir/portfolio 200 in 1591ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 55ms
+ GET /support 200 in 107ms
+ ✓ Compiled in 528ms (1065 modules)
+ GET /support 200 in 83ms
+ ✓ Compiled in 2.1s (1608 modules)
+ GET /support 200 in 1512ms
+ GET /support 200 in 51ms
+ GET /ir/portfolio 200 in 168ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 51ms
+ ✓ Compiled in 1894ms (1622 modules)
+ GET /support 200 in 1550ms
+ GET /support 200 in 56ms
+ ○ Compiling /ir ...
+ ✓ Compiled /ir in 790ms (599 modules)
+ GET /ir 200 in 1006ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 93ms
+ GET /_next/static/chunks/app/ir/page.js 404 in 90ms
+ ○ Compiling /ir/data-room ...
+ ✓ Compiled /ir/data-room in 1132ms (1665 modules)
+ GET /ir/data-room 200 in 1352ms
+ GET /_next/static/chunks/app/ir/layout.js 404 in 53ms
+ ○ Compiling /ir/financials ...
+ ✓ Compiled /ir/financials in 5.5s (2712 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 3.9s (1518 modules)
+ GET / 200 in 6137ms
+ GET / 200 in 602ms
+ ✓ Compiled in 2.2s (3102 modules)
+ GET /support 404 in 1843ms
+ GET /support 200 in 69ms
+ GET /support 200 in 146ms
+ ✓ Compiled in 2.7s (3088 modules)
+ GET /support 404 in 2239ms
+ GET /support 200 in 74ms
+ GET /support 200 in 172ms
+ GET /support 200 in 311ms
+ ✓ Compiled in 1498ms (2525 modules)
+ GET /support 200 in 171ms
+ GET /support 200 in 345ms
+ ✓ Compiled in 1552ms (2525 modules)
+ GET /support 200 in 167ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/.next/cache/webpack/server-development/0.pack.gz_' -> '/home/oss/Business/workspaces/nexus-workspace/v1-4/aic-website/.next/cache/webpack/server-development/0.pack.gz'
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.2s (2525 modules)
+ GET /support 404 in 1880ms
+ GET /support 200 in 110ms
+ GET /support 200 in 298ms
+ GET /support 200 in 243ms
+ ✓ Compiled in 1446ms (2525 modules)
+ GET /support 200 in 204ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.7s (2511 modules)
+ GET /support 404 in 1974ms
+ GET /support 200 in 89ms
+ GET /support 200 in 247ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1954ms (2525 modules)
+ GET /support 404 in 1587ms
+ GET /support 200 in 87ms
+ GET /support 200 in 165ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1925ms (2525 modules)
+ GET /support 404 in 1566ms
+ GET /support 200 in 73ms
+ GET /support 200 in 152ms
+ ○ Compiling /docs ...
+ ✓ Compiled /docs in 692ms (2516 modules)
+ GET /docs 200 in 887ms
+ ✓ Compiled /nexus in 369ms (940 modules)
+ GET /nexus 200 in 473ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.4s (2510 modules)
+ GET /nexus 404 in 1598ms
+ GET /nexus 200 in 68ms
+ GET /nexus 200 in 183ms
+ ✓ Compiled in 557ms (1591 modules)
+ GET /nexus 200 in 93ms
+ ○ Compiling /assessment ...
+ ✓ Compiled /assessment in 1186ms (2514 modules)
+ GET /assessment 200 in 1562ms
+ GET /resources/whitepapers 404 in 274ms
+ GET /resources/whitepapers 404 in 201ms
+ GET /assessment 200 in 546ms
+ ✓ Compiled in 4.5s (2508 modules)
+ GET /assessment 404 in 3237ms
+ GET /assessment 200 in 126ms
+ GET /assessment 200 in 241ms
+ ○ Compiling /resources/whitepapers ...
+ ✓ Compiled /resources/whitepapers in 1543ms (2514 modules)
+ GET /resources/whitepapers 200 in 1878ms
+ GET /resources/webinars 404 in 44ms
+ GET /resources/webinars 404 in 64ms
+ GET /resources/whitepapers 200 in 209ms
+ ✓ Compiled /support in 361ms (920 modules)
+ GET /support 200 in 637ms
+ ✓ Compiled in 2.2s (2493 modules)
+ GET /support 404 in 1766ms
+ GET /support 200 in 81ms
+ GET /support 200 in 239ms
+ ✓ Compiled /contact in 355ms (921 modules)
+ GET /contact 200 in 477ms
+ ✓ Compiled /services/strategy in 333ms (921 modules)
+ GET /services/strategy 200 in 573ms
+ ○ Compiling /services/implementation ...
+ ✓ Compiled /services/implementation in 520ms (2502 modules)
+ GET /services/implementation 200 in 748ms
+ ○ Compiling /services/governance ...
+ ✓ Compiled /services/governance in 546ms (2507 modules)
+ GET /services/governance 200 in 770ms
+ ✓ Compiled /services/training in 401ms (935 modules)
+ ✓ Compiled in 732ms (1577 modules)
+ GET /services/training 200 in 1603ms
+ GET /about 200 in 1823ms
+ ○ Compiling /services/innovation ...
+ ✓ Compiled /services/innovation in 682ms (2519 modules)
+ GET /services/innovation 200 in 923ms
+ ○ Compiling /services/optimization ...
+ ✓ Compiled /services/optimization in 638ms (2523 modules)
+ GET /services/optimization 200 in 846ms
+ ✓ Compiled /case-studies in 442ms (948 modules)
+ GET /case-studies 200 in 566ms
+ ○ Compiling /careers ...
+ ✓ Compiled /careers in 1083ms (2534 modules)
+ GET /solutions/smb 200 in 1410ms
+ GET /careers 200 in 997ms
+ ○ Compiling /solutions/enterprise ...
+ ✓ Compiled /solutions/enterprise in 684ms (2537 modules)
+ GET /solutions/enterprise 200 in 919ms
+ ○ Compiling /solutions/healthcare ...
+ ✓ Compiled /solutions/healthcare in 1005ms (2540 modules)
+ GET /solutions/healthcare 200 in 1260ms
+ ○ Compiling /solutions/financial ...
+ ✓ Compiled /solutions/financial in 888ms (2543 modules)
+ GET /solutions/financial 200 in 1164ms
+ ○ Compiling /solutions/manufacturing ...
+ ✓ Compiled /solutions/manufacturing in 1152ms (2546 modules)
+ GET /solutions/manufacturing 200 in 1423ms
+ ○ Compiling /solutions/retail ...
+ ✓ Compiled /solutions/retail in 1053ms (2544 modules)
+ GET /solutions/retail 200 in 1285ms
+ ○ Compiling /blog ...
+ ✓ Compiled /blog in 1370ms (2549 modules)
+ GET /blog 200 in 1527ms
+ ○ Compiling /partners ...
+ ✓ Compiled /partners in 829ms (2553 modules)
+ GET /partners 200 in 976ms
+ GET /case-studies 200 in 197ms
+ GET /careers 200 in 197ms
+ GET /blog 200 in 170ms
+ GET /partners 200 in 171ms
+ ○ Compiling /docs ...
+ ✓ Compiled /docs in 568ms (976 modules)
+ GET /docs 200 in 885ms
+ ○ Compiling /nexus ...
+ ✓ Compiled /nexus in 586ms (980 modules)
+ GET /nexus 200 in 886ms
+ ○ Compiling /assessment ...
+ ✓ Compiled /assessment in 597ms (983 modules)
+ GET /assessment 200 in 885ms
+ ○ Compiling /resources/whitepapers ...
+ ✓ Compiled /resources/whitepapers in 744ms (987 modules)
+ GET /resources/whitepapers 200 in 1077ms
+ ○ Compiling /resources/webinars ...
+ ✓ Compiled /resources/webinars in 893ms (2566 modules)
+ GET /resources/webinars 200 in 1135ms
+ ○ Compiling /support ...
+ ✓ Compiled /support in 612ms (996 modules)
+ GET /support 200 in 849ms
+ ○ Compiling /privacy ...
+ ✓ Compiled /privacy in 645ms (998 modules)
+ GET /privacy 200 in 873ms
+ ○ Compiling /terms ...
+ ✓ Compiled /terms in 595ms (1000 modules)
+ GET /terms 200 in 845ms
+ ○ Compiling /cookies ...
+ ✓ Compiled /cookies in 911ms (2576 modules)
+ GET /cookies 200 in 1089ms
+ ○ Compiling /security ...
+ ✓ Compiled /security in 1064ms (2581 modules)
+ GET /security 200 in 1365ms
+ GET /solutions/retail 200 in 67ms
+ GET /solutions/manufacturing 200 in 64ms
+ GET /solutions/financial 200 in 73ms
+ GET /solutions/healthcare 200 in 63ms
+ GET /solutions/enterprise 200 in 70ms
+ GET /solutions/smb 200 in 66ms
+ GET / 200 in 555ms
+ GET /about 200 in 229ms
+ GET /contact 200 in 185ms
+ ○ Compiling /consultation ...
+ ✓ Compiled /services/optimization in 1549ms (988 modules)
+ ✓ Compiled (992 modules)
+ GET /consultation 200 in 2604ms
+ GET /services/optimization 200 in 1319ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 934ms (1061 modules)
+ GET /admin 200 in 1437ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 863ms (1068 modules)
+ GET /admin/settings 200 in 1259ms
+ ○ Compiling /admin/analytics ...
+ ✓ Compiled /services/innovation in 800ms (1074 modules)
+ ✓ Compiled (1077 modules)
+ GET /admin/analytics 200 in 1959ms
+ GET /services/innovation 200 in 1437ms
+ ○ Compiling /admin/audit-logs ...
+ ✓ Compiled /admin/audit-logs in 1402ms (1082 modules)
+ GET /admin/audit-logs 200 in 1710ms
+ ○ Compiling /client ...
+ ✓ Compiled /client in 923ms (1108 modules)
+ ○ Compiling /services/governance ...
+ ✓ Compiled /services/governance in 782ms (1113 modules)
+ GET /client 200 in 2926ms
+ GET /services/governance 200 in 2109ms
+ ○ Compiling /client/settings ...
+ ✓ Compiled /client/settings in 915ms (1119 modules)
+ GET /client/settings 200 in 1213ms
+ ○ Compiling /ir ...
+ ✓ Compiled /ir in 942ms (1142 modules)
+ GET /ir 200 in 1174ms
+ ○ Compiling /ir/updates ...
+ ✓ Compiled /ir/updates in 1344ms (1145 modules)
+ GET /ir/updates 200 in 2673ms
+ GET /privacy 200 in 2041ms
+ ○ Compiling /ir/board-meetings ...
+ ✓ Compiled /ir/board-meetings in 883ms (1148 modules)
+ GET /ir/board-meetings 200 in 1346ms
+ GET /terms 200 in 45ms
+ GET /cookies 200 in 46ms
+ GET /security 200 in 105ms
+ ○ Compiling /services/strategy ...
+ ✓ Compiled /services/strategy in 2.2s (1148 modules)
+ GET /services/strategy 200 in 2524ms
+ ○ Compiling /services/implementation ...
+ ✓ Compiled /services/implementation in 685ms (1126 modules)
+ GET /services/implementation 200 in 952ms
+ GET /services/governance 200 in 130ms
+ ○ Compiling /services/training ...
+ ✓ Compiled /services/training in 1337ms (1130 modules)
+ GET /services/training 200 in 1648ms
+ GET /services/innovation 200 in 120ms
+ GET /services/optimization 200 in 139ms
+ GET /solutions/smb 200 in 119ms
+ GET /solutions/enterprise 200 in 123ms
+ GET /solutions/healthcare 200 in 127ms
+ GET /solutions/financial 200 in 121ms
+ GET /solutions/manufacturing 200 in 125ms
+ GET /solutions/retail 200 in 121ms
+ GET /about 200 in 127ms
+ ○ Compiling /case-studies ...
+ ✓ Compiled /case-studies in 1152ms (1124 modules)
+ GET /case-studies 200 in 1467ms
+ ○ Compiling /careers ...
+ ✓ Compiled /careers in 762ms (1128 modules)
+ GET /careers 200 in 1059ms
+ ○ Compiling /blog ...
+ ✓ Compiled /blog in 1116ms (1131 modules)
+ GET /blog 200 in 1387ms
+ ○ Compiling /partners ...
+ ✓ Compiled /partners in 708ms (1135 modules)
+ GET /partners 200 in 995ms
+ GET /contact 200 in 134ms
+ ○ Compiling /docs ...
+ ✓ Compiled /docs in 1222ms (1140 modules)
+ GET /docs 200 in 1531ms
+ ○ Compiling /nexus ...
+ ✓ Compiled /nexus in 765ms (1144 modules)
+ GET /nexus 200 in 1023ms
+ ○ Compiling /assessment ...
+ ✓ Compiled /assessment in 806ms (1147 modules)
+ GET /assessment 200 in 1174ms
+ ○ Compiling /resources/whitepapers ...
+ ✓ Compiled /resources/whitepapers in 842ms (1150 modules)
+ GET /resources/whitepapers 200 in 1120ms
+ ○ Compiling /resources/webinars ...
+ ✓ Compiled /resources/webinars in 829ms (1154 modules)
+ GET /resources/webinars 200 in 1165ms
+ ○ Compiling /support ...
+ ✓ Compiled /support in 809ms (1158 modules)
+ GET /support 200 in 1093ms
+ GET /privacy 200 in 108ms
+ GET /terms 200 in 116ms
+ GET /cookies 200 in 119ms
+ GET /security 200 in 159ms
+[?25h

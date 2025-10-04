@@ -1,0 +1,10 @@
+{
+  "name": "auth-service",
+  "sourceRoot": "services/auth-service/cmd",
+  "targets": {
+    "build": { "executor": "nx:run-commands", "options": { "command": "go build -o dist/auth-service ./cmd" }, "outputs": ["dist/auth-service"] },
+    "test": { "executor": "nx:run-commands", "options": { "command": "go test ./..." } },
+    "serve": { "executor": "nx:run-commands", "options": { "command": "go run ./cmd" } },
+    "docker": { "executor": "nx:run-commands", "options": { "command": "docker build -t auth-service ." } }
+  }
+}

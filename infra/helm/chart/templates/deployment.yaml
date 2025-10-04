@@ -1,0 +1,7 @@
+
+      {{- if and .Values.otel .Values.otel.tls }}
+      volumes:
+      - name: tls
+        secret:
+          secretName: {{ .Values.otel.tls.secretName | default "otel-collector-tls" }}
+      {{- end }}

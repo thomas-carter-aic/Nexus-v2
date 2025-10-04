@@ -1,0 +1,4 @@
+replicaCount: 1
+image:
+  repository: example
+  tag: v0.1.0

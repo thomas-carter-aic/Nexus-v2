@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "orchestration-service.name" . }}-reconciler
+spec:
+  schedule: "{{ .Values.reconciler.cron | default "*/5 * * * *" }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ include "orchestration-service.name" . }}
+          containers:
+            - name: reconciler
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              command: ["sh","-c","curl -sS http://{{ include "orchestration-service.name" . }}:{{ .Values.readinessProbe.httpGet.port }}/reconcile || true"]
+          restartPolicy: OnFailure

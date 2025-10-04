@@ -1,0 +1,6 @@
+apiVersion: v2
+name: istio
+description: Istio install chart skeleton (use upstream istioctl or helm charts in production)
+type: application
+version: 0.1.0
+appVersion: ""

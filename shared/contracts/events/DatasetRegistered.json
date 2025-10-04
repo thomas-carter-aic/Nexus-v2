@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.DatasetRegistered",
+  "type": "object",
+  "properties": {
+    "datasetId": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "registeredAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "datasetId",
+    "version",
+    "registeredAt"
+  ]
+}

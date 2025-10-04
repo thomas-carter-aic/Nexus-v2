@@ -1,0 +1,467 @@
+# Prometheus Configuration for AIC-AIPaaS Monitoring
+# This configuration sets up comprehensive monitoring for the AI platform
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: server
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      scrape_timeout: 10s
+      evaluation_interval: 15s
+      external_labels:
+        cluster: 'aic-aipaas-eks'
+        environment: 'production'
+
+    rule_files:
+      - "/etc/prometheus/rules/*.yml"
+
+    alerting:
+      alertmanagers:
+        - static_configs:
+            - targets:
+              - alertmanager:9093
+
+    scrape_configs:
+      # Prometheus itself
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Kubernetes API Server
+      - job_name: 'kubernetes-apiservers'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - default
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: default;kubernetes;https
+
+      # Kubernetes Nodes
+      - job_name: 'kubernetes-nodes'
+        kubernetes_sd_configs:
+          - role: node
+        scheme: https
+        tls_config:
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+          - target_label: __address__
+            replacement: kubernetes.default.svc:443
+          - source_labels: [__meta_kubernetes_node_name]
+            regex: (.+)
+            target_label: __metrics_path__
+            replacement: /api/v1/nodes/${1}/proxy/metrics
+
+      # Kubernetes Node Exporter
+      - job_name: 'kubernetes-node-exporter'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_endpoints_name]
+            action: keep
+            regex: node-exporter
+          - source_labels: [__meta_kubernetes_endpoint_address_target_name]
+            target_label: node
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
+
+      # Kubernetes Pods
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+
+      # Authentication Service
+      - job_name: 'auth-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - microservices
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: auth-service
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: http
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Application Management Service
+      - job_name: 'app-management-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - microservices
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: app-management-service
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: http
+        metrics_path: /actuator/prometheus
+        scrape_interval: 30s
+
+      # AI Model Training Service
+      - job_name: 'model-training-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - ai-services
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: model-training-service
+        metrics_path: /metrics
+        scrape_interval: 60s
+
+      # AI Inference Service
+      - job_name: 'inference-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - ai-services
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: inference-service
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Data Catalog Service
+      - job_name: 'data-catalog-service'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - data-services
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: data-catalog-service
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Istio Service Mesh Metrics
+      - job_name: 'istio-mesh'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istio-proxy;http-monitoring
+        metrics_path: /stats/prometheus
+        scrape_interval: 15s
+
+      # Istio Control Plane
+      - job_name: 'istio-policy'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istio-policy;http-monitoring
+
+      - job_name: 'istio-telemetry'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istio-telemetry;http-monitoring
+
+      - job_name: 'pilot'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names:
+                - istio-system
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: istiod;http-monitoring
+
+      # NVIDIA GPU Metrics
+      - job_name: 'nvidia-gpu'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            action: keep
+            regex: '.*gpu.*'
+          - source_labels: [__meta_kubernetes_pod_container_port_name]
+            action: keep
+            regex: gpu-metrics
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # PostgreSQL Exporter
+      - job_name: 'postgresql'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: postgresql-exporter
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Redis Exporter
+      - job_name: 'redis'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: redis-exporter
+        metrics_path: /metrics
+        scrape_interval: 30s
+
+      # Kafka Exporter
+      - job_name: 'kafka'
+        kubernetes_sd_configs:
+          - role: endpoints
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: kafka-exporter
+        metrics_path: /metrics
+        scrape_interval: 60s
+
+      # Custom Application Metrics
+      - job_name: 'custom-metrics'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape_custom]
+            action: keep
+            regex: true
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+          - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+            action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            target_label: __address__
+
+  # Alert Rules
+  alert_rules.yml: |
+    groups:
+      - name: aic-aipaas.rules
+        rules:
+          # High CPU Usage
+          - alert: HighCPUUsage
+            expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High CPU usage detected"
+              description: "CPU usage is above 80% for more than 5 minutes on {{ $labels.instance }}"
+
+          # High Memory Usage
+          - alert: HighMemoryUsage
+            expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High memory usage detected"
+              description: "Memory usage is above 85% for more than 5 minutes on {{ $labels.instance }}"
+
+          # Pod Crash Looping
+          - alert: PodCrashLooping
+            expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod is crash looping"
+              description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping"
+
+          # Service Down
+          - alert: ServiceDown
+            expr: up == 0
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Service is down"
+              description: "Service {{ $labels.job }} is down"
+
+          # High Request Latency
+          - alert: HighRequestLatency
+            expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service)) > 0.5
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High request latency"
+              description: "95th percentile latency is above 500ms for service {{ $labels.service }}"
+
+          # High Error Rate
+          - alert: HighErrorRate
+            expr: sum(rate(http_requests_total{status=~"5.."}[5m])) by (service) / sum(rate(http_requests_total[5m])) by (service) > 0.05
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "High error rate"
+              description: "Error rate is above 5% for service {{ $labels.service }}"
+
+          # AI Model Training Failed
+          - alert: ModelTrainingFailed
+            expr: increase(ai_model_training_failures_total[1h]) > 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: "AI model training failed"
+              description: "Model training has failed {{ $value }} times in the last hour"
+
+          # GPU Utilization Low
+          - alert: LowGPUUtilization
+            expr: nvidia_gpu_utilization_gpu < 20
+            for: 30m
+            labels:
+              severity: info
+            annotations:
+              summary: "Low GPU utilization"
+              description: "GPU utilization is below 20% for more than 30 minutes on {{ $labels.instance }}"
+
+          # Database Connection Pool Exhausted
+          - alert: DatabaseConnectionPoolExhausted
+            expr: hikaricp_connections_active / hikaricp_connections_max > 0.9
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Database connection pool nearly exhausted"
+              description: "Database connection pool is 90% full for {{ $labels.pool }}"
+
+          # Disk Space Low
+          - alert: DiskSpaceLow
+            expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100 < 10
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Disk space is low"
+              description: "Disk space is below 10% on {{ $labels.instance }} mount {{ $labels.mountpoint }}"
+
+          # Istio Sidecar Missing
+          - alert: IstioSidecarMissing
+            expr: up{job="istio-mesh"} == 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Istio sidecar is missing"
+              description: "Istio sidecar is not running for {{ $labels.instance }}"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-recording-rules
+  namespace: monitoring
+  labels:
+    app: prometheus
+    component: server
+data:
+  recording_rules.yml: |
+    groups:
+      - name: aic-aipaas.recording.rules
+        interval: 30s
+        rules:
+          # Request rate per service
+          - record: aic:http_requests_per_second
+            expr: sum(rate(http_requests_total[1m])) by (service, method, status)
+
+          # Average response time per service
+          - record: aic:http_request_duration_seconds_avg
+            expr: sum(rate(http_request_duration_seconds_sum[1m])) by (service) / sum(rate(http_request_duration_seconds_count[1m])) by (service)
+
+          # Error rate per service
+          - record: aic:http_error_rate
+            expr: sum(rate(http_requests_total{status=~"5.."}[1m])) by (service) / sum(rate(http_requests_total[1m])) by (service)
+
+          # CPU usage per pod
+          - record: aic:pod_cpu_usage_percent
+            expr: sum(rate(container_cpu_usage_seconds_total{container!="POD",container!=""}[1m])) by (namespace, pod) * 100
+
+          # Memory usage per pod
+          - record: aic:pod_memory_usage_percent
+            expr: sum(container_memory_working_set_bytes{container!="POD",container!=""}) by (namespace, pod) / sum(container_spec_memory_limit_bytes{container!="POD",container!=""}) by (namespace, pod) * 100
+
+          # AI model inference rate
+          - record: aic:ai_inference_per_second
+            expr: sum(rate(ai_inference_requests_total[1m])) by (model, version)
+
+          # AI model accuracy
+          - record: aic:ai_model_accuracy
+            expr: sum(ai_model_correct_predictions_total) by (model, version) / sum(ai_model_total_predictions_total) by (model, version)
+
+          # Database query rate
+          - record: aic:database_queries_per_second
+            expr: sum(rate(database_queries_total[1m])) by (database, query_type)
+
+          # Network I/O per pod
+          - record: aic:pod_network_io_bytes_per_second
+            expr: sum(rate(container_network_receive_bytes_total[1m]) + rate(container_network_transmit_bytes_total[1m])) by (namespace, pod)

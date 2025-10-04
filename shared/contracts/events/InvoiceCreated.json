@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.InvoiceCreated",
+  "type": "object",
+  "properties": {
+    "invoiceId": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "createdAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "invoiceId",
+    "amount",
+    "createdAt"
+  ]
+}

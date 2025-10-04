@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: nginx:stable
+            env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "otel-collector:4317"
+            - name: SSL_CERT_FILE
+              value: "/etc/otel/tls/tls.crt"
+        ports:
+        - containerPort: 80
+
+      volumes:
+        - name: tls
+          secret:
+            secretName: otel-collector-tls

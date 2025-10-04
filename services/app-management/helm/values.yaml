@@ -1,0 +1,199 @@
+replicaCount: 3
+
+image:
+  repository: aic-aipaas/app-management-service
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/actuator/prometheus"
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+  hosts:
+    - host: app-management.aic-aipaas.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: app-management-tls
+      hosts:
+        - app-management.aic-aipaas.local
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        labelSelector:
+          matchExpressions:
+          - key: app.kubernetes.io/name
+            operator: In
+            values:
+            - app-management-service
+        topologyKey: kubernetes.io/hostname
+
+env:
+  - name: SPRING_PROFILES_ACTIVE
+    value: "prod"
+  - name: SPRING_DATASOURCE_URL
+    valueFrom:
+      secretKeyRef:
+        name: app-management-secrets
+        key: database-url
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: app-management-secrets
+        key: database-username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: app-management-secrets
+        key: database-password
+  - name: JWT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: app-management-secrets
+        key: jwt-secret
+  - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+    value: "http://eureka-server:8761/eureka/"
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: http
+  initialDelaySeconds: 60
+  periodSeconds: 30
+  timeoutSeconds: 10
+  failureThreshold: 3
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: http
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "postgres123"
+    username: "appmanagement"
+    password: "appmanagement123"
+    database: "appmanagement"
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+
+# Service Monitor for Prometheus
+serviceMonitor:
+  enabled: true
+  labels:
+    app: app-management-service
+  interval: 30s
+  path: /actuator/prometheus
+
+# ConfigMap for application configuration
+configMap:
+  enabled: true
+  data:
+    application.yml: |
+      server:
+        port: 8080
+        servlet:
+          context-path: /api/v1
+      
+      spring:
+        application:
+          name: app-management-service
+        jpa:
+          hibernate:
+            ddl-auto: validate
+          show-sql: false
+          properties:
+            hibernate:
+              dialect: org.hibernate.dialect.PostgreSQLDialect
+              format_sql: true
+        
+      management:
+        endpoints:
+          web:
+            exposure:
+              include: health,info,metrics,prometheus
+        endpoint:
+          health:
+            show-details: always
+        metrics:
+          export:
+            prometheus:
+              enabled: true
+      
+      logging:
+        level:
+          com.aic.aipaas: INFO
+          org.springframework.security: DEBUG
+        pattern:
+          console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"

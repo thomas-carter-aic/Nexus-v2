@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+        - name: otel-collector
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+{{- if .Values.otel }}
+env:
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: "{{ .Values.otel.otlp.address | default "otel-collector:4317" }}"
+- name: SSL_CERT_FILE
+  value: "{{ .Values.otel.tls.secretMountPath | default "/etc/otel/tls/tls.crt" }}"
+{{- if .Values.otel.tls }}
+volumeMounts:
+- name: tls
+  mountPath: "{{ .Values.otel.tls.secretMountPath | default "/etc/otel/tls" }}"
+  readOnly: true
+{{- end }}
+{{- end }}
+          args: ["--config=/conf/otel-collector-config.yaml"]
+          volumeMounts:
+            - name: config
+              mountPath: /conf
+            - name: tls
+              mountPath: /conf/tls
+              readOnly: true
+{{- if .Values.collector.clientAuth }}
+            - name: ca
+              mountPath: /conf/tls/ca.crt
+              subPath: ca.crt
+              readOnly: true
+{{- end }}
+          ports:
+            - containerPort: {{ .Values.service.port | default 4317 }}
+      volumes:
+        - name: config
+          configMap:
+            name: otel-collector-config
+        - name: tls
+          secret:
+            secretName: otel-collector-tls
+{{- if .Values.collector.clientAuth }}
+        - name: ca
+          secret:
+            secretName: otel-collector-ca
+{{- end }}

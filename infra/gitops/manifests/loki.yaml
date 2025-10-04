@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+name: loki
+namespace: argocd
+spec:
+project: default
+source:
+ repoURL: 'https://github.com/yourorg/ai-paas-monorepo.git'
+ targetRevision: main
+ path: gitops/manifests
+destination:
+ server: 'https://kubernetes.default.svc'
+ namespace: monitoring
+syncPolicy:
+ automated:
+   prune: true
+   selfHeal: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: loki
+namespace: monitoring
+spec:
+replicas: 1
+selector:
+ matchLabels:
+   app: loki
+template:
+ metadata:
+   labels:
+     app: loki
+ spec:
+   containers:
+   - name: loki
+     image: grafana/loki:latest
+     ports:
+     - containerPort: 3100

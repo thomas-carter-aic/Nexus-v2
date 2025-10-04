@@ -1,0 +1,20 @@
+name: Canary Deploy
+on:
+  workflow_dispatch:
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+      - name: Install argo rollouts kubectl plugin
+        run: |
+          curl -sSL -o /tmp/kubectl-argo-rollouts.tar.gz https://github.com/argoproj/argo-rollouts/releases/download/v1.6.0/kubectl-argo-rollouts-linux-amd64.tar.gz
+          tar -xzf /tmp/kubectl-argo-rollouts.tar.gz -C /usr/local/bin
+      - name: Apply rollout manifest
+        run: |
+          kubectl apply -f infra/helm/rollouts/example-rollout.yaml
+      - name: Monitor rollout
+        run: |
+          kubectl argo rollouts get rollout example-rollout --watch

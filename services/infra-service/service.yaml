@@ -1,0 +1,3 @@
+name: infra-service
+language: go
+owner: platform-team@example.com

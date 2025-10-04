@@ -1,0 +1,16 @@
+{
+  "$id": "com.platform.events.ModelTrained",
+  "type": "object",
+  "properties": {
+    "modelId": {
+      "type": "string"
+    },
+    "registeredAt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "modelId",
+    "registeredAt"
+  ]
+}

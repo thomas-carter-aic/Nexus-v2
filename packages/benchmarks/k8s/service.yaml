@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: benchmarks
+spec:
+  type: ClusterIP
+  selector:
+    app: benchmarks
+  ports:
+    - port: 80
+      targetPort: 80

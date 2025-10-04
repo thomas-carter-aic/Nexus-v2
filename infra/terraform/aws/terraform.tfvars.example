@@ -1,0 +1,58 @@
+# AIC AI Platform Terraform Variables
+# Copy this file to terraform.tfvars and customize for your environment
+
+# Basic Configuration
+cluster_name = "aic-aipaas-eks"
+aws_region   = "us-west-2"
+environment  = "dev"
+
+# Kubernetes Configuration
+kubernetes_version = "1.28"
+
+# Cost Optimization (set to false for production)
+single_nat_gateway         = true
+enable_deletion_protection = false
+
+# Logging
+log_retention_days = 7
+
+# Node Group Sizing (adjust based on your needs)
+system_node_min_size     = 1
+system_node_max_size     = 3
+system_node_desired_size = 2
+
+app_node_min_size     = 2
+app_node_max_size     = 10
+app_node_desired_size = 3
+
+gpu_node_min_size     = 0
+gpu_node_max_size     = 5
+gpu_node_desired_size = 1
+
+# Database Configuration
+enable_rds              = true
+db_instance_class       = "db.t3.micro"
+db_allocated_storage    = 20
+db_max_allocated_storage = 100
+
+# Cache Configuration
+enable_elasticache     = true
+redis_node_type        = "cache.t3.micro"
+redis_num_cache_nodes  = 1
+
+# Storage Configuration
+s3_bucket_prefix     = "aic-aipaas"
+enable_s3_versioning = true
+
+# Monitoring
+enable_cloudwatch_logs    = true
+enable_container_insights = true
+
+# Tags
+common_tags = {
+  Project     = "AIC-AIPaaS"
+  Environment = "dev"
+  ManagedBy   = "Terraform"
+  Owner       = "Platform-Team"
+  CostCenter  = "Engineering"
+}

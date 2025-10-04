@@ -1,0 +1,492 @@
+# Kong Declarative Configuration for AIC AI Platform API Gateway
+_format_version: "3.0"
+_transform: true
+
+# Services
+services:
+  - name: auth-service
+    url: http://auth-service:8000
+    tags:
+      - auth
+      - microservices
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 10
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+          policy: local
+
+  - name: app-management-service
+    url: http://app-management-service:8080
+    tags:
+      - app-management
+      - microservices
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 50
+      - name: rate-limiting
+        config:
+          minute: 200
+          hour: 2000
+          policy: local
+
+  - name: model-training-service
+    url: http://model-training-service:8001
+    tags:
+      - ai
+      - training
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 100
+      - name: rate-limiting
+        config:
+          minute: 50
+          hour: 500
+          policy: local
+
+  - name: inference-service
+    url: http://inference-service:8002
+    tags:
+      - ai
+      - inference
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 20
+      - name: rate-limiting
+        config:
+          minute: 1000
+          hour: 10000
+          policy: local
+
+  - name: model-registry-service
+    url: http://model-registry-service:8003
+    tags:
+      - ai
+      - registry
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 10
+      - name: rate-limiting
+        config:
+          minute: 100
+          hour: 1000
+          policy: local
+
+  - name: feature-store-service
+    url: http://feature-store-service:8004
+    tags:
+      - ai
+      - features
+    plugins:
+      - name: prometheus
+        config:
+          per_consumer: true
+      - name: request-size-limiting
+        config:
+          allowed_payload_size: 50
+      - name: rate-limiting
+        config:
+          minute: 500
+          hour: 5000
+          policy: local
+
+# Routes
+routes:
+  # Authentication routes
+  - name: auth-login
+    service: auth-service
+    paths:
+      - /api/v1/auth/login
+    methods:
+      - POST
+    plugins:
+      - name: cors
+        config:
+          origins:
+            - "*"
+          methods:
+            - GET
+            - POST
+            - OPTIONS
+          headers:
+            - Accept
+            - Accept-Version
+            - Content-Length
+            - Content-MD5
+            - Content-Type
+            - Date
+            - Authorization
+          exposed_headers:
+            - X-Auth-Token
+          credentials: true
+          max_age: 3600
+
+  - name: auth-register
+    service: auth-service
+    paths:
+      - /api/v1/auth/register
+    methods:
+      - POST
+
+  - name: auth-validate
+    service: auth-service
+    paths:
+      - /api/v1/auth/validate
+    methods:
+      - POST
+
+  - name: auth-me
+    service: auth-service
+    paths:
+      - /api/v1/auth/me
+    methods:
+      - GET
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  # Application Management routes
+  - name: applications
+    service: app-management-service
+    paths:
+      - /api/v1/applications
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  - name: applications-by-id
+    service: app-management-service
+    paths:
+      - /api/v1/applications/~
+    methods:
+      - GET
+      - PUT
+      - DELETE
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  # Model Training routes
+  - name: training-jobs
+    service: model-training-service
+    paths:
+      - /api/v1/training/jobs
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+      - name: request-transformer
+        config:
+          add:
+            headers:
+              - "X-Service-Name:model-training"
+
+  - name: training-jobs-by-id
+    service: model-training-service
+    paths:
+      - /api/v1/training/jobs/~
+    methods:
+      - GET
+      - DELETE
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  # Inference routes
+  - name: inference-endpoints
+    service: inference-service
+    paths:
+      - /api/v1/inference/endpoints
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  - name: inference-predict
+    service: inference-service
+    paths:
+      - /api/v1/inference/predict/~
+    methods:
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+      - name: response-transformer
+        config:
+          add:
+            headers:
+              - "X-Inference-Service:aic-aipaas"
+
+  # Model Registry routes
+  - name: models
+    service: model-registry-service
+    paths:
+      - /api/v1/models
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  - name: model-versions
+    service: model-registry-service
+    paths:
+      - /api/v1/models/~/versions
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  # Feature Store routes
+  - name: feature-views
+    service: feature-store-service
+    paths:
+      - /api/v1/features/views
+    methods:
+      - GET
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+
+  - name: online-features
+    service: feature-store-service
+    paths:
+      - /api/v1/features/online
+    methods:
+      - POST
+    plugins:
+      - name: jwt
+        config:
+          secret_is_base64: false
+          key_claim_name: iss
+          claims_to_verify:
+            - exp
+      - name: response-transformer
+        config:
+          add:
+            headers:
+              - "X-Feature-Store:aic-aipaas"
+
+# Consumers (API Keys)
+consumers:
+  - username: aic-platform-admin
+    custom_id: admin-001
+    tags:
+      - admin
+    keyauth_credentials:
+      - key: admin-api-key-12345
+    jwt_secrets:
+      - algorithm: HS256
+        key: aic-platform-jwt-secret
+        secret: your-jwt-secret-key-change-in-production
+
+  - username: aic-platform-user
+    custom_id: user-001
+    tags:
+      - user
+    keyauth_credentials:
+      - key: user-api-key-67890
+    jwt_secrets:
+      - algorithm: HS256
+        key: aic-platform-jwt-secret
+        secret: your-jwt-secret-key-change-in-production
+
+# Global Plugins
+plugins:
+  - name: prometheus
+    config:
+      per_consumer: true
+      status_code_metrics: true
+      latency_metrics: true
+      bandwidth_metrics: true
+
+  - name: correlation-id
+    config:
+      header_name: X-Correlation-ID
+      generator: uuid#counter
+      echo_downstream: true
+
+  - name: request-id
+    config:
+      header_name: X-Request-ID
+      generator: uuid
+      echo_downstream: true
+
+  - name: datadog
+    config:
+      host: datadog-agent
+      port: 8125
+      metrics:
+        - name: request.count
+          stat_type: counter
+          tags:
+            - service_name:kong
+        - name: request.size
+          stat_type: histogram
+        - name: response.size
+          stat_type: histogram
+        - name: latency
+          stat_type: histogram
+
+# Upstreams for load balancing
+upstreams:
+  - name: auth-service-upstream
+    algorithm: round-robin
+    hash_on: none
+    hash_fallback: none
+    healthchecks:
+      active:
+        timeout: 1
+        concurrency: 10
+        http_path: "/health"
+        healthy:
+          interval: 10
+          http_statuses:
+            - 200
+            - 302
+          successes: 2
+        unhealthy:
+          interval: 10
+          http_statuses:
+            - 429
+            - 404
+            - 500
+            - 501
+            - 502
+            - 503
+            - 504
+            - 505
+          tcp_failures: 3
+          timeouts: 3
+          http_failures: 5
+      passive:
+        healthy:
+          http_statuses:
+            - 200
+            - 201
+            - 202
+            - 203
+            - 204
+            - 205
+            - 206
+            - 300
+            - 301
+            - 302
+            - 303
+            - 304
+            - 307
+            - 308
+          successes: 3
+        unhealthy:
+          http_statuses:
+            - 429
+            - 500
+            - 503
+          tcp_failures: 3
+          timeouts: 3
+          http_failures: 3
+    targets:
+      - target: auth-service:8000
+        weight: 100
+
+  - name: inference-service-upstream
+    algorithm: least-connections
+    hash_on: none
+    hash_fallback: none
+    healthchecks:
+      active:
+        timeout: 1
+        concurrency: 10
+        http_path: "/health"
+        healthy:
+          interval: 5
+          http_statuses:
+            - 200
+          successes: 2
+        unhealthy:
+          interval: 5
+          http_statuses:
+            - 429
+            - 500
+            - 502
+            - 503
+            - 504
+          tcp_failures: 2
+          timeouts: 2
+          http_failures: 3
+    targets:
+      - target: inference-service:8002
+        weight: 100

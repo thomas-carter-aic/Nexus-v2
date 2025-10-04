@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.PurchaseCompleted",
+  "type": "object",
+  "properties": {
+    "purchaseId": {
+      "type": "string"
+    },
+    "itemId": {
+      "type": "string"
+    },
+    "buyerId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "purchaseId",
+    "itemId",
+    "buyerId"
+  ]
+}

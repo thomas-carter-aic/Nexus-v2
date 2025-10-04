@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mobile-ios
+spec:
+  type: ClusterIP
+  selector:
+    app: mobile-ios
+  ports:
+    - port: 80
+      targetPort: 80

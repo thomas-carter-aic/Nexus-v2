@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Override for development
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: dev-password-123
+      
+  # Add development-specific services
+  pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: aicp-pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@aicp.dev
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  pgadmin-data:

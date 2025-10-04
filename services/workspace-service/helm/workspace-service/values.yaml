@@ -1,0 +1,29 @@
+replicaCount: 1
+image:
+  repository: registry.example.com/workspace-service
+  tag: latest
+kafka:
+  bootstrap: ""
+resources:
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 20
+
+otel:
+  otlp:
+    address: otel-collector:4317

@@ -1,0 +1,8 @@
+replicaCount: 1
+image:
+  repository: otel/opentelemetry-collector-contrib
+  tag: 0.79.0
+service:
+  port: 4317
+collector:
+  clientAuth: false # set true to require client certs (mTLS)

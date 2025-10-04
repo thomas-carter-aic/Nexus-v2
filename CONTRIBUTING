@@ -1,0 +1,61 @@
+# 🤝 Contributing Guide
+
+We welcome contributions to the AIC Platform! Here’s how to get started:
+
+## 🧭 Workflow
+
+1. **Fork** the repo
+2. **Create** a new feature or fix branch:
+```bash
+   git checkout -b feat/domain-service-logic
+````
+
+3. **Run** tests and linters locally:
+
+   ```bash
+   ./dev.sh test
+   ./dev.sh lint
+   ```
+4. **Push** and submit a PR with a clear title and description.
+
+## ✅ Commit Message Format (Conventional Commits)
+
+```
+<type>(scope): short summary
+
+[optional body]
+```
+
+Examples:
+
+* `feat(agent): add event-driven training logic`
+* `fix(build): resolve bazel go_binary linking issue`
+* `chore(repo): scaffold root-level folder structure`
+
+## 📂 Directory Expectations
+
+* Follow DDD: Each `domains/<context>` must include `model/`, `service/`, `event/`, and `repository/`
+* Place all reusable logic in appropriate `libs/` or `packages/`
+* Document each service in `docs/` and its OpenAPI/Proto schema
+
+## 🧪 Testing
+
+All code should be covered by:
+
+* Unit tests in `*/tests/unit/`
+* Integration tests in `*/tests/integration/`
+* Contract tests in `tests/contract/`
+* End-to-end tests in `tests/e2e/`
+
+## 🔒 Security & Secrets
+
+Never commit secrets. Use `.env.local` or `config/secrets/.env.template`.
+
+## 📄 Documentation
+
+Update:
+
+* `docs/` if the system behavior changes
+* `README.md` if the structure or build process changes
+
+Thanks for contributing!

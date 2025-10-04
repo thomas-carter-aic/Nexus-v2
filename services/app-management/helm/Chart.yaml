@@ -1,0 +1,31 @@
+apiVersion: v2
+name: app-management-service
+description: A Helm chart for AIC AI Platform Application Management Service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - application-management
+  - microservice
+  - ai-platform
+  - aic-aipaas
+  - java
+  - spring-boot
+
+home: https://github.com/thomas-carter-aic/aic-aipaas
+sources:
+  - https://github.com/thomas-carter-aic/aic-aipaas
+
+maintainers:
+  - name: AIC AI Platform Team
+    email: platform@appliedinnovationcorp.com
+
+dependencies:
+  - name: postgresql
+    version: 12.12.10
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+
+annotations:
+  category: Application Management

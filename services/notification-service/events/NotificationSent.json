@@ -1,0 +1,20 @@
+{
+  "$id": "com.platform.events.NotificationSent",
+  "type": "object",
+  "properties": {
+    "notificationId": {
+      "type": "string"
+    },
+    "sentAt": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "notificationId",
+    "sentAt",
+    "channel"
+  ]
+}

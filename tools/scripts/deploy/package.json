@@ -1,0 +1,17 @@
+{
+  "name": "@scripts/deploy",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'No build needed' && exit 0",
+    "start": "node index.js",
+    "test": "echo 'No tests yet' && exit 0",
+    "lint": "eslint . --ext .js --config ../../configs/eslint/.eslintrc.json"
+  },
+  "devDependencies": {
+    "@configs/eslint": "workspace:*",
+    "@configs/prettier": "workspace:*",
+    "typescript": "^5.0.0"
+  }
+}

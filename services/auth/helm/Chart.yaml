@@ -1,0 +1,25 @@
+apiVersion: v2
+name: auth-service
+description: A Helm chart for AIC AI Platform Authentication Service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - authentication
+  - microservice
+  - ai-platform
+  - aic-aipaas
+
+home: https://github.com/thomas-carter-aic/aic-aipaas
+sources:
+  - https://github.com/thomas-carter-aic/aic-aipaas
+
+maintainers:
+  - name: AIC AI Platform Team
+    email: platform@appliedinnovationcorp.com
+
+dependencies: []
+
+annotations:
+  category: Authentication

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vault-config
+data:
+  vault.hcl: |
+{{- if eq .Values.storage.type "raft" }}
+    ui = true
+    storage "raft" {
+      path = "/vault/data"
+      node_id = "{{ .Release.Name }}-{{ .Values.storage.raft.nodeIdPrefix }}-{{ .Release.Revision }}"
+    }
+{{- else if eq .Values.storage.type "s3" }}
+    ui = true
+    storage "s3" {
+      bucket = "{{ .Values.storage.s3.bucket }}"
+      region = "{{ .Values.storage.s3.region }}"
+      {{- if .Values.storage.s3.endpoint }}
+      endpoint = "{{ .Values.storage.s3.endpoint }}"
+      {{- end }}
+    }
+{{- end }}
+{{- if eq .Values.autoUnseal.provider "awskms" }}
+    seal "awskms" {
+      region = "{{ .Values.autoUnseal.awskms.region }}"
+      kms_key_id = "{{ .Values.autoUnseal.awskms.kmsKeyId }}"
+      access_key = ""
+      secret_key = ""
+      # When using Kubernetes, prefer using IAM role (IRSA) or instance profile for permissions
+    }
+{{- end }}
+    listener "tcp" {
+      address = "0.0.0.0:8200"
+      tls_disable = "true"
+    }
+    telemetry {
+      prometheus_retention_time = "24h"
+    }

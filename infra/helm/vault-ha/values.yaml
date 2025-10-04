@@ -1,0 +1,52 @@
+replicaCount: 3
+image:
+  repository: hashicorp/vault
+  tag: "1.14.0"
+service:
+  type: ClusterIP
+  port: 8200
+
+# Storage options: raft (default) or s3
+storage:
+  type: raft # options: raft, s3
+  raft:
+    # raft settings
+    nodeIdPrefix: "vault"
+  s3:
+    bucket: ""
+    region: ""
+    endpoint: "" # optional for S3-compatible endpoints
+    kmsKeyId: ""  # optional server-side encryption KMS key
+
+# Auto-unseal options: none, awskms
+autoUnseal:
+  provider: none # options: none, awskms
+  awskms:
+    kmsKeyId: ""
+    region: ""
+    roleARN: ""
+
+# Persistence and PVC settings
+persistence:
+  enabled: true
+  storageClass: "" # set by operator if needed
+  size: 10Gi
+
+# Kubernetes auth (for ExternalSecrets, cert-manager)
+kubernetesAuth:
+  enabled: true
+  serviceAccountName: vault-auth
+
+rbac:
+  create: true
+
+# Resources and probes
+resources: {}
+readinessProbe:
+  httpGet:
+    path: /v1/sys/health?standbyok=true
+    port: {{ .Values.service.port | default 8200 }}
+livenessProbe:
+  httpGet:
+    path: /v1/sys/health
+    port: {{ .Values.service.port | default 8200 }}

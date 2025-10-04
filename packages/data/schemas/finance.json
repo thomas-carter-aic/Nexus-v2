@@ -1,0 +1,286 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Finance Data Schema",
+  "description": "Schema definition for financial data in AIC-AIPaaS platform",
+  "type": "object",
+  "properties": {
+    "transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique transaction identifier",
+          "pattern": "^TXN-[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Transaction timestamp in ISO 8601 format"
+        },
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Transaction amount in base currency units"
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["USD", "EUR", "GBP", "JPY", "CAD", "AUD"],
+          "description": "ISO 4217 currency code"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["debit", "credit", "transfer", "payment", "refund"],
+          "description": "Type of transaction"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "food_dining",
+            "transportation",
+            "shopping",
+            "entertainment",
+            "utilities",
+            "healthcare",
+            "education",
+            "travel",
+            "investment",
+            "insurance",
+            "other"
+          ],
+          "description": "Transaction category"
+        },
+        "merchant": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Merchant name"
+            },
+            "category": {
+              "type": "string",
+              "description": "Merchant category code (MCC)"
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "state": {
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "country": {
+                  "type": "string",
+                  "pattern": "^[A-Z]{2}$",
+                  "description": "ISO 3166-1 alpha-2 country code"
+                },
+                "coordinates": {
+                  "type": "object",
+                  "properties": {
+                    "latitude": {
+                      "type": "number",
+                      "minimum": -90,
+                      "maximum": 90
+                    },
+                    "longitude": {
+                      "type": "number",
+                      "minimum": -180,
+                      "maximum": 180
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": ["name"]
+        },
+        "account": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Account identifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["checking", "savings", "credit", "investment", "loan"],
+              "description": "Account type"
+            },
+            "balance": {
+              "type": "number",
+              "description": "Current account balance"
+            }
+          },
+          "required": ["id", "type"]
+        },
+        "fraud_indicators": {
+          "type": "object",
+          "properties": {
+            "risk_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Fraud risk score (0-1)"
+            },
+            "flags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "unusual_amount",
+                  "unusual_location",
+                  "unusual_time",
+                  "velocity_check",
+                  "merchant_risk",
+                  "device_risk"
+                ]
+              },
+              "description": "List of fraud detection flags"
+            },
+            "model_version": {
+              "type": "string",
+              "description": "Version of fraud detection model used"
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "source": {
+              "type": "string",
+              "enum": ["mobile_app", "web", "atm", "pos", "api"],
+              "description": "Transaction source"
+            },
+            "device_id": {
+              "type": "string",
+              "description": "Device identifier"
+            },
+            "ip_address": {
+              "type": "string",
+              "format": "ipv4",
+              "description": "IP address of transaction origin"
+            },
+            "user_agent": {
+              "type": "string",
+              "description": "User agent string"
+            },
+            "session_id": {
+              "type": "string",
+              "description": "Session identifier"
+            }
+          }
+        }
+      },
+      "required": ["id", "timestamp", "amount", "currency", "type", "account"]
+    },
+    "customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Customer unique identifier"
+        },
+        "demographics": {
+          "type": "object",
+          "properties": {
+            "age_group": {
+              "type": "string",
+              "enum": ["18-25", "26-35", "36-45", "46-55", "56-65", "65+"]
+            },
+            "income_bracket": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "very_high"]
+            },
+            "credit_score_range": {
+              "type": "string",
+              "enum": ["poor", "fair", "good", "very_good", "excellent"]
+            },
+            "employment_status": {
+              "type": "string",
+              "enum": ["employed", "self_employed", "unemployed", "retired", "student"]
+            }
+          }
+        },
+        "preferences": {
+          "type": "object",
+          "properties": {
+            "communication_channel": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["email", "sms", "push", "mail"]
+              }
+            },
+            "product_interests": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["savings", "investment", "loans", "insurance", "credit_cards"]
+              }
+            }
+          }
+        }
+      },
+      "required": ["id"]
+    }
+  },
+  "required": ["transaction"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "transaction": {
+        "id": "TXN-12345678-1234-5678-9ABC-123456789012",
+        "timestamp": "2025-01-15T14:30:00Z",
+        "amount": 45.67,
+        "currency": "USD",
+        "type": "debit",
+        "category": "food_dining",
+        "merchant": {
+          "name": "Coffee Shop Downtown",
+          "category": "5814",
+          "location": {
+            "city": "New York",
+            "state": "NY",
+            "country": "US",
+            "coordinates": {
+              "latitude": 40.7128,
+              "longitude": -74.0060
+            }
+          }
+        },
+        "account": {
+          "id": "ACC-987654321",
+          "type": "checking",
+          "balance": 1234.56
+        },
+        "fraud_indicators": {
+          "risk_score": 0.15,
+          "flags": [],
+          "model_version": "v2.1.0"
+        },
+        "metadata": {
+          "source": "mobile_app",
+          "device_id": "DEV-123456",
+          "ip_address": "192.168.1.100",
+          "session_id": "SES-789012"
+        }
+      },
+      "customer": {
+        "id": "CUST-456789",
+        "demographics": {
+          "age_group": "26-35",
+          "income_bracket": "medium",
+          "credit_score_range": "good",
+          "employment_status": "employed"
+        },
+        "preferences": {
+          "communication_channel": ["email", "push"],
+          "product_interests": ["savings", "investment"]
+        }
+      }
+    }
+  ]
+}

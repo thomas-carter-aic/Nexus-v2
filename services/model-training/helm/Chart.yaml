@@ -1,0 +1,36 @@
+apiVersion: v2
+name: model-training-service
+description: A Helm chart for AIC AI Platform Model Training Service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - ai
+  - machine-learning
+  - model-training
+  - pytorch
+  - tensorflow
+  - distributed-training
+  - gpu
+
+home: https://github.com/thomas-carter-aic/aic-aipaas
+sources:
+  - https://github.com/thomas-carter-aic/aic-aipaas
+
+maintainers:
+  - name: AIC AI Platform Team
+    email: platform@appliedinnovationcorp.com
+
+dependencies:
+  - name: postgresql
+    version: 12.12.10
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+  - name: redis
+    version: 18.4.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+
+annotations:
+  category: AI/ML Training
